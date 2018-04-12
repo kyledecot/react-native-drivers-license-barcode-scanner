@@ -4,6 +4,9 @@
   "main": "index.js",
   "author": "Kyle Decot <kyle.decot@icloud.com>",
   "version": "0.0.1",
+  "scripts": {
+    "ci": ""
+  },
   "peerDependencies": {
     "prop-types": "^15.0 || ^16.0",
     "react": "^16.0",
