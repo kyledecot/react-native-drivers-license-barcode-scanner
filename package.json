@@ -1,0 +1,17 @@
+{
+  "name": "react-native-drivers-license-barcode-scanner",
+  "description": "React Native Drivers License Barcode Scanner component for iOS + Android",
+  "main": "index.js",
+  "author": "Kyle Decot <kyle.decot@icloud.com>",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "react": "^16.0",
+    "react": "^16.0",
+    "react-native": "^0.51 || ^0.52 || ^0.53 || ^0.54",
+    "prop-types": "^15.0 || ^16.0"
+  },
+  "dependencies": {
+    "babel-plugin-module-resolver": "^2.3.0",
+    "babel-preset-react-native": "1.9.0"
+  }
+}
