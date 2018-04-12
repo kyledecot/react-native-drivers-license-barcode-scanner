@@ -1,0 +1,346 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FC816068207F972700CD89FD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FC816067207F972700CD89FD /* AppDelegate.m */; };
+		FC81606B207F972700CD89FD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC81606A207F972700CD89FD /* ViewController.m */; };
+		FC81606E207F972700CD89FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC81606C207F972700CD89FD /* Main.storyboard */; };
+		FC816070207F972800CD89FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC81606F207F972800CD89FD /* Assets.xcassets */; };
+		FC816073207F972800CD89FD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC816071207F972800CD89FD /* LaunchScreen.storyboard */; };
+		FC816076207F972800CD89FD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FC816075207F972800CD89FD /* main.m */; };
+		FC81607E207F97B400CD89FD /* DriversLicenseBarcodeScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = FC81607D207F97B400CD89FD /* DriversLicenseBarcodeScanner.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		FC816063207F972700CD89FD /* DriversLicenseBarcodeScanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DriversLicenseBarcodeScanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC816066207F972700CD89FD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		FC816067207F972700CD89FD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		FC816069207F972700CD89FD /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		FC81606A207F972700CD89FD /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		FC81606D207F972700CD89FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		FC81606F207F972800CD89FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FC816072207F972800CD89FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		FC816074207F972800CD89FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FC816075207F972800CD89FD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		FC81607C207F977700CD89FD /* DriversLicenseBarcodeScanner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriversLicenseBarcodeScanner.h; sourceTree = "<group>"; };
+		FC81607D207F97B400CD89FD /* DriversLicenseBarcodeScanner.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DriversLicenseBarcodeScanner.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FC816060207F972700CD89FD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FC81605A207F972700CD89FD = {
+			isa = PBXGroup;
+			children = (
+				FC816065207F972700CD89FD /* DriversLicenseBarcodeScanner */,
+				FC816064207F972700CD89FD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FC816064207F972700CD89FD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FC816063207F972700CD89FD /* DriversLicenseBarcodeScanner.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FC816065207F972700CD89FD /* DriversLicenseBarcodeScanner */ = {
+			isa = PBXGroup;
+			children = (
+				FC816066207F972700CD89FD /* AppDelegate.h */,
+				FC816067207F972700CD89FD /* AppDelegate.m */,
+				FC816069207F972700CD89FD /* ViewController.h */,
+				FC81606A207F972700CD89FD /* ViewController.m */,
+				FC81606C207F972700CD89FD /* Main.storyboard */,
+				FC81606F207F972800CD89FD /* Assets.xcassets */,
+				FC816071207F972800CD89FD /* LaunchScreen.storyboard */,
+				FC816074207F972800CD89FD /* Info.plist */,
+				FC816075207F972800CD89FD /* main.m */,
+				FC81607C207F977700CD89FD /* DriversLicenseBarcodeScanner.h */,
+				FC81607D207F97B400CD89FD /* DriversLicenseBarcodeScanner.m */,
+			);
+			path = DriversLicenseBarcodeScanner;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FC816062207F972700CD89FD /* DriversLicenseBarcodeScanner */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FC816079207F972800CD89FD /* Build configuration list for PBXNativeTarget "DriversLicenseBarcodeScanner" */;
+			buildPhases = (
+				FC81605F207F972700CD89FD /* Sources */,
+				FC816060207F972700CD89FD /* Frameworks */,
+				FC816061207F972700CD89FD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DriversLicenseBarcodeScanner;
+			productName = DriversLicenseBarcodeScanner;
+			productReference = FC816063207F972700CD89FD /* DriversLicenseBarcodeScanner.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FC81605B207F972700CD89FD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0930;
+				ORGANIZATIONNAME = "Kyle Decot";
+				TargetAttributes = {
+					FC816062207F972700CD89FD = {
+						CreatedOnToolsVersion = 9.3;
+					};
+				};
+			};
+			buildConfigurationList = FC81605E207F972700CD89FD /* Build configuration list for PBXProject "DriversLicenseBarcodeScanner" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FC81605A207F972700CD89FD;
+			productRefGroup = FC816064207F972700CD89FD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FC816062207F972700CD89FD /* DriversLicenseBarcodeScanner */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FC816061207F972700CD89FD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC816073207F972800CD89FD /* LaunchScreen.storyboard in Resources */,
+				FC816070207F972800CD89FD /* Assets.xcassets in Resources */,
+				FC81606E207F972700CD89FD /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FC81605F207F972700CD89FD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC81606B207F972700CD89FD /* ViewController.m in Sources */,
+				FC81607E207F97B400CD89FD /* DriversLicenseBarcodeScanner.m in Sources */,
+				FC816076207F972800CD89FD /* main.m in Sources */,
+				FC816068207F972700CD89FD /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		FC81606C207F972700CD89FD /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FC81606D207F972700CD89FD /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		FC816071207F972800CD89FD /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FC816072207F972800CD89FD /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		FC816077207F972800CD89FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		FC816078207F972800CD89FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FC81607A207F972800CD89FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 74MF967YTF;
+				INFOPLIST_FILE = DriversLicenseBarcodeScanner/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.kyledecot.DriversLicenseBarcodeScanner;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FC81607B207F972800CD89FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 74MF967YTF;
+				INFOPLIST_FILE = DriversLicenseBarcodeScanner/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.kyledecot.DriversLicenseBarcodeScanner;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FC81605E207F972700CD89FD /* Build configuration list for PBXProject "DriversLicenseBarcodeScanner" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC816077207F972800CD89FD /* Debug */,
+				FC816078207F972800CD89FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FC816079207F972800CD89FD /* Build configuration list for PBXNativeTarget "DriversLicenseBarcodeScanner" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC81607A207F972800CD89FD /* Debug */,
+				FC81607B207F972800CD89FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FC81605B207F972700CD89FD /* Project object */;
+}
