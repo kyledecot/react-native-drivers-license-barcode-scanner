@@ -7,6 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
 
-@interface DriversLicenseBarcodeScannerView : UIView
+@interface DriversLicenseBarcodeScannerView : UIView<AVCaptureVideoDataOutputSampleBufferDelegate>
+
+-(void)startCapturing;
+
 @end

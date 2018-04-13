@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		FC4939592080E646005E969C /* DriversLicenseBarcodeScannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = FC4939582080E646005E969C /* DriversLicenseBarcodeScannerView.m */; };
 		FC49397E2080EEF8005E969C /* libBarcodeScanner.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC49396C2080EE74005E969C /* libBarcodeScanner.a */; };
+		FC4939902080F4C7005E969C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC49395B2080E6D9005E969C /* AVFoundation.framework */; };
 		FCB46F912080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB46F902080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC4939902080F4C7005E969C /* AVFoundation.framework in Frameworks */,
 				FC49397E2080EEF8005E969C /* libBarcodeScanner.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

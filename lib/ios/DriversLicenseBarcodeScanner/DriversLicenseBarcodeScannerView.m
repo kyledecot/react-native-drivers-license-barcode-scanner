@@ -10,5 +10,16 @@
 
 @implementation DriversLicenseBarcodeScannerView
 
+-(id)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame: frame]) {
+        [self startCapturing];
+    }
+    
+    return self;
+}
+
+-(void)startCapturing {
+    NSLog(@"Capturing");
+}
 
 @end
