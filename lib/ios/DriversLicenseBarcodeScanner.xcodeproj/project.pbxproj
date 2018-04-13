@@ -80,7 +80,7 @@
 			dependencies = (
 			);
 			name = DriversLicenseBarcodeScanner;
-			productName = AirMaps;
+			productName = DriversLicenseBarcodeScanner;
 			productReference = 11FA5C511C4A1296003AC2EE /* libDriversLicenseBarcodeScanner.a */;
 			productType = "com.apple.product-type.library.static";
 		};
