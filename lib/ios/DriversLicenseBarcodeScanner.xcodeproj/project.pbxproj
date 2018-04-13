@@ -7,32 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FC816068207F972700CD89FD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FC816067207F972700CD89FD /* AppDelegate.m */; };
-		FC81606B207F972700CD89FD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC81606A207F972700CD89FD /* ViewController.m */; };
-		FC81606E207F972700CD89FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC81606C207F972700CD89FD /* Main.storyboard */; };
-		FC816070207F972800CD89FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC81606F207F972800CD89FD /* Assets.xcassets */; };
-		FC816073207F972800CD89FD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC816071207F972800CD89FD /* LaunchScreen.storyboard */; };
-		FC816076207F972800CD89FD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FC816075207F972800CD89FD /* main.m */; };
-		FC81607E207F97B400CD89FD /* DriversLicenseBarcodeScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = FC81607D207F97B400CD89FD /* DriversLicenseBarcodeScanner.m */; };
+		FC81558F207FFF8400BD9EC7 /* DriversLicenseBarcodeScannerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FC81558E207FFF8400BD9EC7 /* DriversLicenseBarcodeScannerManager.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		FC815588207FFF8400BD9EC7 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		FC816063207F972700CD89FD /* DriversLicenseBarcodeScanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DriversLicenseBarcodeScanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		FC816066207F972700CD89FD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		FC816067207F972700CD89FD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		FC816069207F972700CD89FD /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		FC81606A207F972700CD89FD /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		FC81606D207F972700CD89FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		FC81606F207F972800CD89FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		FC816072207F972800CD89FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		FC816074207F972800CD89FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FC816075207F972800CD89FD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		FC81607C207F977700CD89FD /* DriversLicenseBarcodeScanner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriversLicenseBarcodeScanner.h; sourceTree = "<group>"; };
-		FC81607D207F97B400CD89FD /* DriversLicenseBarcodeScanner.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DriversLicenseBarcodeScanner.m; sourceTree = "<group>"; };
+		FC81558A207FFF8400BD9EC7 /* libDriversLicenseBarcodeScanner.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDriversLicenseBarcodeScanner.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC81558E207FFF8400BD9EC7 /* DriversLicenseBarcodeScannerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DriversLicenseBarcodeScannerManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		FC816060207F972700CD89FD /* Frameworks */ = {
+		FC815587207FFF8400BD9EC7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -42,36 +38,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		FC81605A207F972700CD89FD = {
+		FC815581207FFF8400BD9EC7 = {
 			isa = PBXGroup;
 			children = (
-				FC816065207F972700CD89FD /* DriversLicenseBarcodeScanner */,
-				FC816064207F972700CD89FD /* Products */,
+				FC81558C207FFF8400BD9EC7 /* DriversLicenseBarcodeScanner */,
+				FC81558B207FFF8400BD9EC7 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		FC816064207F972700CD89FD /* Products */ = {
+		FC81558B207FFF8400BD9EC7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FC816063207F972700CD89FD /* DriversLicenseBarcodeScanner.app */,
+				FC81558A207FFF8400BD9EC7 /* libDriversLicenseBarcodeScanner.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		FC816065207F972700CD89FD /* DriversLicenseBarcodeScanner */ = {
+		FC81558C207FFF8400BD9EC7 /* DriversLicenseBarcodeScanner */ = {
 			isa = PBXGroup;
 			children = (
-				FC816066207F972700CD89FD /* AppDelegate.h */,
-				FC816067207F972700CD89FD /* AppDelegate.m */,
-				FC816069207F972700CD89FD /* ViewController.h */,
-				FC81606A207F972700CD89FD /* ViewController.m */,
-				FC81606C207F972700CD89FD /* Main.storyboard */,
-				FC81606F207F972800CD89FD /* Assets.xcassets */,
-				FC816071207F972800CD89FD /* LaunchScreen.storyboard */,
-				FC816074207F972800CD89FD /* Info.plist */,
-				FC816075207F972800CD89FD /* main.m */,
-				FC81607C207F977700CD89FD /* DriversLicenseBarcodeScanner.h */,
-				FC81607D207F97B400CD89FD /* DriversLicenseBarcodeScanner.m */,
+				FC81558E207FFF8400BD9EC7 /* DriversLicenseBarcodeScannerManager.m */,
 			);
 			path = DriversLicenseBarcodeScanner;
 			sourceTree = "<group>";
@@ -79,13 +65,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		FC816062207F972700CD89FD /* DriversLicenseBarcodeScanner */ = {
+		FC815589207FFF8400BD9EC7 /* DriversLicenseBarcodeScanner */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FC816079207F972800CD89FD /* Build configuration list for PBXNativeTarget "DriversLicenseBarcodeScanner" */;
+			buildConfigurationList = FC815593207FFF8400BD9EC7 /* Build configuration list for PBXNativeTarget "DriversLicenseBarcodeScanner" */;
 			buildPhases = (
-				FC81605F207F972700CD89FD /* Sources */,
-				FC816060207F972700CD89FD /* Frameworks */,
-				FC816061207F972700CD89FD /* Resources */,
+				FC815586207FFF8400BD9EC7 /* Sources */,
+				FC815587207FFF8400BD9EC7 /* Frameworks */,
+				FC815588207FFF8400BD9EC7 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -93,89 +79,53 @@
 			);
 			name = DriversLicenseBarcodeScanner;
 			productName = DriversLicenseBarcodeScanner;
-			productReference = FC816063207F972700CD89FD /* DriversLicenseBarcodeScanner.app */;
-			productType = "com.apple.product-type.application";
+			productReference = FC81558A207FFF8400BD9EC7 /* libDriversLicenseBarcodeScanner.a */;
+			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		FC81605B207F972700CD89FD /* Project object */ = {
+		FC815582207FFF8400BD9EC7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Kyle Decot";
 				TargetAttributes = {
-					FC816062207F972700CD89FD = {
+					FC815589207FFF8400BD9EC7 = {
 						CreatedOnToolsVersion = 9.3;
 					};
 				};
 			};
-			buildConfigurationList = FC81605E207F972700CD89FD /* Build configuration list for PBXProject "DriversLicenseBarcodeScanner" */;
+			buildConfigurationList = FC815585207FFF8400BD9EC7 /* Build configuration list for PBXProject "DriversLicenseBarcodeScanner" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
 			);
-			mainGroup = FC81605A207F972700CD89FD;
-			productRefGroup = FC816064207F972700CD89FD /* Products */;
+			mainGroup = FC815581207FFF8400BD9EC7;
+			productRefGroup = FC81558B207FFF8400BD9EC7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FC816062207F972700CD89FD /* DriversLicenseBarcodeScanner */,
+				FC815589207FFF8400BD9EC7 /* DriversLicenseBarcodeScanner */,
 			);
 		};
 /* End PBXProject section */
 
-/* Begin PBXResourcesBuildPhase section */
-		FC816061207F972700CD89FD /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FC816073207F972800CD89FD /* LaunchScreen.storyboard in Resources */,
-				FC816070207F972800CD89FD /* Assets.xcassets in Resources */,
-				FC81606E207F972700CD89FD /* Main.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
-		FC81605F207F972700CD89FD /* Sources */ = {
+		FC815586207FFF8400BD9EC7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC81606B207F972700CD89FD /* ViewController.m in Sources */,
-				FC81607E207F97B400CD89FD /* DriversLicenseBarcodeScanner.m in Sources */,
-				FC816076207F972800CD89FD /* main.m in Sources */,
-				FC816068207F972700CD89FD /* AppDelegate.m in Sources */,
+				FC81558F207FFF8400BD9EC7 /* DriversLicenseBarcodeScannerManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXVariantGroup section */
-		FC81606C207F972700CD89FD /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				FC81606D207F972700CD89FD /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		FC816071207F972800CD89FD /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				FC816072207F972800CD89FD /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
-
 /* Begin XCBuildConfiguration section */
-		FC816077207F972800CD89FD /* Debug */ = {
+		FC815591207FFF8400BD9EC7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -233,7 +183,7 @@
 			};
 			name = Debug;
 		};
-		FC816078207F972800CD89FD /* Release */ = {
+		FC815592207FFF8400BD9EC7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -285,36 +235,26 @@
 			};
 			name = Release;
 		};
-		FC81607A207F972800CD89FD /* Debug */ = {
+		FC815594207FFF8400BD9EC7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 74MF967YTF;
-				INFOPLIST_FILE = DriversLicenseBarcodeScanner/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.kyledecot.DriversLicenseBarcodeScanner;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		FC81607B207F972800CD89FD /* Release */ = {
+		FC815595207FFF8400BD9EC7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 74MF967YTF;
-				INFOPLIST_FILE = DriversLicenseBarcodeScanner/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.kyledecot.DriversLicenseBarcodeScanner;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -322,25 +262,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		FC81605E207F972700CD89FD /* Build configuration list for PBXProject "DriversLicenseBarcodeScanner" */ = {
+		FC815585207FFF8400BD9EC7 /* Build configuration list for PBXProject "DriversLicenseBarcodeScanner" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FC816077207F972800CD89FD /* Debug */,
-				FC816078207F972800CD89FD /* Release */,
+				FC815591207FFF8400BD9EC7 /* Debug */,
+				FC815592207FFF8400BD9EC7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FC816079207F972800CD89FD /* Build configuration list for PBXNativeTarget "DriversLicenseBarcodeScanner" */ = {
+		FC815593207FFF8400BD9EC7 /* Build configuration list for PBXNativeTarget "DriversLicenseBarcodeScanner" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FC81607A207F972800CD89FD /* Debug */,
-				FC81607B207F972800CD89FD /* Release */,
+				FC815594207FFF8400BD9EC7 /* Debug */,
+				FC815595207FFF8400BD9EC7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = FC81605B207F972700CD89FD /* Project object */;
+	rootObject = FC815582207FFF8400BD9EC7 /* Project object */;
 }
