@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FC4939552080E544005E969C /* libDriverLicenseParser.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC4939532080E544005E969C /* libDriverLicenseParser.a */; };
 		FCB46F912080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB46F902080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m */; };
 /* End PBXBuildFile section */
 
@@ -24,6 +25,9 @@
 
 /* Begin PBXFileReference section */
 		11FA5C511C4A1296003AC2EE /* libDriversLicenseBarcodeScanner.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDriversLicenseBarcodeScanner.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC4939532080E544005E969C /* libDriverLicenseParser.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libDriverLicenseParser.a; sourceTree = "<group>"; };
+		FC4939542080E544005E969C /* DriverLicenseParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DriverLicenseParser.h; sourceTree = "<group>"; };
+		FC4939562080E56B005E969C /* BarcodeScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarcodeScanner.h; sourceTree = "<group>"; };
 		FCB46F8F2080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DriversLicenseBarcodeScannerManager.h; path = DriversLicenseBarcodeScanner/DriversLicenseBarcodeScannerManager.h; sourceTree = "<group>"; };
 		FCB46F902080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DriversLicenseBarcodeScannerManager.m; path = DriversLicenseBarcodeScanner/DriversLicenseBarcodeScannerManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -33,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC4939552080E544005E969C /* libDriverLicenseParser.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,10 +63,22 @@
 		9B9498A32017EF9D00158761 /* DriversLicenseBarcodeScanner */ = {
 			isa = PBXGroup;
 			children = (
+				FC4939562080E56B005E969C /* BarcodeScanner.h */,
+				FC4939522080E544005E969C /* DriversLicenseParser */,
 				FCB46F8F2080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.h */,
 				FCB46F902080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m */,
 			);
 			name = DriversLicenseBarcodeScanner;
+			sourceTree = "<group>";
+		};
+		FC4939522080E544005E969C /* DriversLicenseParser */ = {
+			isa = PBXGroup;
+			children = (
+				FC4939532080E544005E969C /* libDriverLicenseParser.a */,
+				FC4939542080E544005E969C /* DriverLicenseParser.h */,
+			);
+			name = DriversLicenseParser;
+			path = "../../../root-ios/ThirdParty/DriversLicenseParser";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
