@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		FC4939552080E544005E969C /* libDriverLicenseParser.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC4939532080E544005E969C /* libDriverLicenseParser.a */; };
+		FC4939592080E646005E969C /* DriversLicenseBarcodeScannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = FC4939582080E646005E969C /* DriversLicenseBarcodeScannerView.m */; };
+		FC49395E2080E70E005E969C /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC49395D2080E70E005E969C /* AVKit.framework */; };
 		FCB46F912080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB46F902080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +30,10 @@
 		FC4939532080E544005E969C /* libDriverLicenseParser.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libDriverLicenseParser.a; sourceTree = "<group>"; };
 		FC4939542080E544005E969C /* DriverLicenseParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DriverLicenseParser.h; sourceTree = "<group>"; };
 		FC4939562080E56B005E969C /* BarcodeScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarcodeScanner.h; sourceTree = "<group>"; };
+		FC4939572080E646005E969C /* DriversLicenseBarcodeScannerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DriversLicenseBarcodeScannerView.h; path = DriversLicenseBarcodeScanner/DriversLicenseBarcodeScannerView.h; sourceTree = "<group>"; };
+		FC4939582080E646005E969C /* DriversLicenseBarcodeScannerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DriversLicenseBarcodeScannerView.m; path = DriversLicenseBarcodeScanner/DriversLicenseBarcodeScannerView.m; sourceTree = "<group>"; };
+		FC49395B2080E6D9005E969C /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		FC49395D2080E70E005E969C /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		FCB46F8F2080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DriversLicenseBarcodeScannerManager.h; path = DriversLicenseBarcodeScanner/DriversLicenseBarcodeScannerManager.h; sourceTree = "<group>"; };
 		FCB46F902080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DriversLicenseBarcodeScannerManager.m; path = DriversLicenseBarcodeScanner/DriversLicenseBarcodeScannerManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -37,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC49395E2080E70E005E969C /* AVKit.framework in Frameworks */,
 				FC4939552080E544005E969C /* libDriverLicenseParser.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -49,6 +56,7 @@
 			children = (
 				9B9498A32017EF9D00158761 /* DriversLicenseBarcodeScanner */,
 				11FA5C521C4A1296003AC2EE /* Products */,
+				FC49395A2080E6D9005E969C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,6 +75,8 @@
 				FC4939522080E544005E969C /* DriversLicenseParser */,
 				FCB46F8F2080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.h */,
 				FCB46F902080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m */,
+				FC4939572080E646005E969C /* DriversLicenseBarcodeScannerView.h */,
+				FC4939582080E646005E969C /* DriversLicenseBarcodeScannerView.m */,
 			);
 			name = DriversLicenseBarcodeScanner;
 			sourceTree = "<group>";
@@ -79,6 +89,15 @@
 			);
 			name = DriversLicenseParser;
 			path = "../../../root-ios/ThirdParty/DriversLicenseParser";
+			sourceTree = "<group>";
+		};
+		FC49395A2080E6D9005E969C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FC49395D2080E70E005E969C /* AVKit.framework */,
+				FC49395B2080E6D9005E969C /* AVFoundation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -107,7 +126,7 @@
 		11FA5C491C4A1296003AC2EE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = Christopher;
 				TargetAttributes = {
 					11FA5C501C4A1296003AC2EE = {
@@ -137,6 +156,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC4939592080E646005E969C /* DriversLicenseBarcodeScannerView.m in Sources */,
 				FCB46F912080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -152,13 +172,23 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -196,13 +226,23 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -233,7 +273,7 @@
 					"$(SRCROOT)/../../react-native/React/**",
 					"$(SRCROOT)/../../react-native/Libraries/Image",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -247,7 +287,7 @@
 					"$(SRCROOT)/../../react-native/React/**",
 					"$(SRCROOT)/../../react-native/Libraries/Image",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
