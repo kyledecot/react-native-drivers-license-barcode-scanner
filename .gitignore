@@ -4,3 +4,5 @@ project.xcworkspace
 *.xcuserstate
 xcuserdata
 build/
+Pods/
+Example.xcworkspace/
