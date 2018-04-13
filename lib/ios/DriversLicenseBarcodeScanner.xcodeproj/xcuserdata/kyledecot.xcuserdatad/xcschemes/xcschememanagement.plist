@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>DriversLicenseBarcodeScanner.xcscheme</key>
+		<key>AirMaps.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,7 +12,7 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>FC815589207FFF8400BD9EC7</key>
+		<key>11FA5C501C4A1296003AC2EE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
