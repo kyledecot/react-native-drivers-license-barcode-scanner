@@ -23,7 +23,10 @@
     
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType: AVMediaTypeVideo];
     
-    AVCaptureOutput *captureOutput = [[AVCaptureVideoDataOutput alloc] init];
+    AVCaptureVideoDataOutput *captureOutput = [[AVCaptureVideoDataOutput alloc] init];
+    
+
+    [captureOutput setSampleBufferDelegate: self queue:dispatch_get_main_queue()];
 //    captureOutput.alwaysDiscardsLateVideoFrames = true
 //    captureOutput.setSampleBufferDelegate(self, queue: DispatchQueue.main)
 
