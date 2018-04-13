@@ -1,4 +1,11 @@
 PODS:
+  - boost-for-react-native (1.63.0)
+  - DoubleConversion (1.1.5)
+  - Folly (2016.09.26.00):
+    - boost-for-react-native
+    - DoubleConversion
+    - glog
+  - glog (0.3.4)
   - React (0.54.4):
     - React/Core (= 0.54.4)
   - react-native-drivers-license-barcode-scanner (0.0.1):
@@ -37,6 +44,9 @@ PODS:
   - yoga (0.54.4.React)
 
 DEPENDENCIES:
+  - DoubleConversion (from `../../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+  - Folly (from `../../node_modules/react-native/third-party-podspecs/Folly.podspec`)
+  - glog (from `../../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - react-native-drivers-license-barcode-scanner (from `../../`)
   - React/Core (from `../../node_modules/react-native`)
   - React/DevSupport (from `../../node_modules/react-native`)
@@ -52,7 +62,17 @@ DEPENDENCIES:
   - React/RCTWebSocket (from `../../node_modules/react-native`)
   - yoga (from `../../node_modules/react-native/ReactCommon/yoga/yoga.podspec`)
 
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - boost-for-react-native
+
 EXTERNAL SOURCES:
+  DoubleConversion:
+    :podspec: "../../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
+  Folly:
+    :podspec: "../../node_modules/react-native/third-party-podspecs/Folly.podspec"
+  glog:
+    :podspec: "../../node_modules/react-native/third-party-podspecs/glog.podspec"
   React:
     :path: "../../node_modules/react-native"
   react-native-drivers-license-barcode-scanner:
@@ -61,10 +81,14 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/yoga/yoga.podspec"
 
 SPEC CHECKSUMS:
+  boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+  DoubleConversion: ebb6747c5b66026ad4f97b789c3ceac6f18e57a6
+  Folly: 211775e49d8da0ca658aebc8eab89d642935755c
+  glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
   React: c237e42de9c70e5cac6eeb52b4cfd3a0910c1f00
   react-native-drivers-license-barcode-scanner: da9f966f93bb2b6947b48c24627c09755c751463
   yoga: 55da126afc384965b96bff46652464373b330add
 
-PODFILE CHECKSUM: 14c38fecec84224417e9a095d7e988fb587faa3a
+PODFILE CHECKSUM: 1f131eb7f3414c179018513d5bdceb1f65f17365
 
 COCOAPODS: 1.5.0
