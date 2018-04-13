@@ -21,18 +21,17 @@
 -(void)startCapturing {
     NSLog(@"Capturing");
     
-    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType: AVMediaTypeVideo];
+    AVCaptureDevice *device = [self frontCamera];
     
     AVCaptureVideoDataOutput *captureOutput = [[AVCaptureVideoDataOutput alloc] init];
     
-
+    [captureOutput setAlwaysDiscardsLateVideoFrames: YES];
     [captureOutput setSampleBufferDelegate: self queue:dispatch_get_main_queue()];
-//    captureOutput.alwaysDiscardsLateVideoFrames = true
-//    captureOutput.setSampleBufferDelegate(self, queue: DispatchQueue.main)
 
-        //    let videoSettings: [String: NSNumber] = [kCVPixelBufferPixelFormatTypeKey as String: NSNumber(value: Int(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange) as Int)]
-    //    captureOutput.videoSettings = videoSettings
-
+    NSString *key = (NSString*)kCVPixelBufferPixelFormatTypeKey;
+    NSNumber *value = [NSNumber numberWithUnsignedInt:kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange];
+    NSDictionary* videoSettings = [NSDictionary dictionaryWithObject:value forKey:key];
+    [captureOutput setVideoSettings:videoSettings];
     
     AVCaptureSession *captureSession = [[AVCaptureSession alloc] init];
     
@@ -91,6 +90,16 @@
         //
         //    focusTimer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(reFocus), userInfo: nil, repeats: true)
     }
+}
+
+- (AVCaptureDevice *)frontCamera {
+    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    for (AVCaptureDevice *device in devices) {
+        if ([device position] == AVCaptureDevicePositionFront) {
+            return device;
+        }
+    }
+    return nil;
 }
 
 // MARK: AVCaptureVideoDataOutputSampleBufferDelegate
