@@ -4,51 +4,66 @@ PODS:
   - Folly (2016.09.26.00):
     - boost-for-react-native
     - DoubleConversion
-    - glog
-  - glog (0.3.4)
-  - React (0.54.4):
-    - React/Core (= 0.54.4)
+    - GLog
+  - GLog (0.3.4)
+  - React (0.53.3):
+    - React/Core (= 0.53.3)
   - react-native-drivers-license-barcode-scanner (0.0.1):
     - React
-  - React/Core (0.54.4):
-    - yoga (= 0.54.4.React)
-  - React/DevSupport (0.54.4):
+  - React/Core (0.53.3):
+    - yoga (= 0.53.3.React)
+  - React/CxxBridge (0.53.3):
+    - Folly (= 2016.09.26.00)
+    - React/Core
+    - React/cxxreact
+  - React/cxxreact (0.53.3):
+    - boost-for-react-native (= 1.63.0)
+    - Folly (= 2016.09.26.00)
+    - React/jschelpers
+    - React/jsinspector
+  - React/DevSupport (0.53.3):
     - React/Core
     - React/RCTWebSocket
-  - React/fishhook (0.54.4)
-  - React/RCTActionSheet (0.54.4):
+  - React/fishhook (0.53.3)
+  - React/jschelpers (0.53.3):
+    - Folly (= 2016.09.26.00)
+    - React/PrivateDatabase
+  - React/jsinspector (0.53.3)
+  - React/PrivateDatabase (0.53.3)
+  - React/RCTActionSheet (0.53.3):
     - React/Core
-  - React/RCTAnimation (0.54.4):
+  - React/RCTAnimation (0.53.3):
     - React/Core
-  - React/RCTBlob (0.54.4):
+  - React/RCTBlob (0.53.3):
     - React/Core
-  - React/RCTGeolocation (0.54.4):
+  - React/RCTGeolocation (0.53.3):
     - React/Core
-  - React/RCTImage (0.54.4):
+  - React/RCTImage (0.53.3):
     - React/Core
     - React/RCTNetwork
-  - React/RCTLinkingIOS (0.54.4):
+  - React/RCTLinkingIOS (0.53.3):
     - React/Core
-  - React/RCTNetwork (0.54.4):
+  - React/RCTNetwork (0.53.3):
     - React/Core
-  - React/RCTSettings (0.54.4):
+  - React/RCTSettings (0.53.3):
     - React/Core
-  - React/RCTText (0.54.4):
+  - React/RCTText (0.53.3):
     - React/Core
-  - React/RCTVibration (0.54.4):
+  - React/RCTVibration (0.53.3):
     - React/Core
-  - React/RCTWebSocket (0.54.4):
+  - React/RCTWebSocket (0.53.3):
     - React/Core
     - React/fishhook
     - React/RCTBlob
-  - yoga (0.54.4.React)
+  - yoga (0.53.3.React)
 
 DEPENDENCIES:
   - DoubleConversion (from `../../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - Folly (from `../../node_modules/react-native/third-party-podspecs/Folly.podspec`)
-  - glog (from `../../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - GLog (from `../../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - react-native-drivers-license-barcode-scanner (from `../../`)
   - React/Core (from `../../node_modules/react-native`)
+  - React/CxxBridge (from `../../node_modules/react-native`)
   - React/DevSupport (from `../../node_modules/react-native`)
   - React/RCTActionSheet (from `../../node_modules/react-native`)
   - React/RCTAnimation (from `../../node_modules/react-native`)
@@ -71,7 +86,7 @@ EXTERNAL SOURCES:
     :podspec: "../../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   Folly:
     :podspec: "../../node_modules/react-native/third-party-podspecs/Folly.podspec"
-  glog:
+  GLog:
     :podspec: "../../node_modules/react-native/third-party-podspecs/glog.podspec"
   React:
     :path: "../../node_modules/react-native"
@@ -83,12 +98,12 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: ebb6747c5b66026ad4f97b789c3ceac6f18e57a6
-  Folly: 211775e49d8da0ca658aebc8eab89d642935755c
-  glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
-  React: c237e42de9c70e5cac6eeb52b4cfd3a0910c1f00
+  Folly: 0e765a0b56a1bf180dcbd51ee178cd3a1e2ab986
+  GLog: ed471a3ad6ad53eefb343a530f15dad283e5ef51
+  React: af66244a7d630be2aef03b4ddfe3570e4eff39fc
   react-native-drivers-license-barcode-scanner: 39741fd8a369d2cfd8a65c0c1fcaf5851d53c499
   yoga: 55da126afc384965b96bff46652464373b330add
 
-PODFILE CHECKSUM: 1f131eb7f3414c179018513d5bdceb1f65f17365
+PODFILE CHECKSUM: 89f6f4c87eafefad813ea61465d4a5c3a11641e9
 
 COCOAPODS: 1.5.0
