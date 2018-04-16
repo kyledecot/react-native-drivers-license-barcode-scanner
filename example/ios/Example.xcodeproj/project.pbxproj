@@ -240,7 +240,7 @@
 				);
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.kyledecot.example;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.kyledecot.react-native-drivers-license-scanner-example";
 				PRODUCT_NAME = Example;
 			};
 			name = Debug;
@@ -259,7 +259,7 @@
 				);
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.kyledecot.example;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.kyledecot.react-native-drivers-license-scanner-example";
 				PRODUCT_NAME = Example;
 			};
 			name = Release;
