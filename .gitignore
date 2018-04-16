@@ -6,3 +6,4 @@ xcuserdata
 build/
 Pods/
 Example.xcworkspace/
+yarn-error.log
