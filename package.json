@@ -18,7 +18,6 @@
     "ci": "npm run lint"
   },
   "peerDependencies": {
-    "prop-types": "^15.0 || ^16.0",
     "react": "^16.0",
     "react-native": "^0.51 || ^0.52 || ^0.53 || ^0.54"
   },
@@ -27,9 +26,8 @@
     "babel-preset-react-native": "1.9.0"
   },
   "devDependencies": {
-    "prop-types": "^15.5.10",
     "react": "^16.2.0 ",
-    "react-native": "^0.53.3"
+    "react-native": "^0.54"
   },
   "rnpm": {
     "android": {
