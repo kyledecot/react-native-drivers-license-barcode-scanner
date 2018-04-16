@@ -17,5 +17,7 @@ Pod::Spec.new do |s|
     :git => "https://github.com/kyledecot/react-native-drivers-license-barcode-scanner.git"
   }
 
+  s.platform     = :ios, "8.0"
+
   s.dependency 'React'
 end
