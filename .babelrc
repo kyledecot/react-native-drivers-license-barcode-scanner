@@ -1,14 +1,14 @@
 {
   "presets": ["react-native"],
   "plugins": [
-  [
-    "module-resolver",
-    {
-      "alias": {
-        "react-native-maps": "./"
-      },
-      "cwd": "babelrc"
-    }
+    [
+      "module-resolver",
+      {
+        "alias": {
+          "react-native-drivers-license-barcode-scanner": "./"
+        },
+        "cwd": "babelrc"
+      }
+    ]
   ]
-]
 }
