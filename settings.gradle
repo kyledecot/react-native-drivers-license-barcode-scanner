@@ -1,4 +1,4 @@
-rootProject.name = 'react-native-maps'
+rootProject.name = 'react-native-drivers-license-barcode-scanner'
 
 include ":example-android"
 project(":example-android").projectDir = file("./example/android/app")
