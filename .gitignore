@@ -8,3 +8,4 @@ build/
 Pods/
 Example.xcworkspace/
 yarn-error.log
+.gradle/

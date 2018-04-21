@@ -33,15 +33,9 @@ import java.util.HashMap;
 import javax.annotation.Nullable;
 
 public class DriversLicenseBarcodeScannerModule extends ReactContextBaseJavaModule {
-
-  private static final String SNAPSHOT_RESULT_FILE = "file";
-  private static final String SNAPSHOT_RESULT_BASE64 = "base64";
-  private static final String SNAPSHOT_FORMAT_PNG = "png";
-  private static final String SNAPSHOT_FORMAT_JPG = "jpg";
-
-  public DriversLicenseBarcodeScannerModule(ReactApplicationContext reactContext) {
-    super(reactContext);
-  }
+  // public DriversLicenseBarcodeScannerModule(ReactApplicationContext reactContext) {
+  //   super(reactContext);
+  // }
 
   @Override
   public String getName() {

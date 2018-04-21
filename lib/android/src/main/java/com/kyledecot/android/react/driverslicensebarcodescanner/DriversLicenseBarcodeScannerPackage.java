@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.kyledecot.android.react.driverslicensebarcodescanner.DriversLicenseBarcodeScannerManager;
+
 public class DriversLicenseBarcodeScannerPackage implements ReactPackage {
   public DriversLicenseBarcodeScannerPackage(Activity activity) {
   } // backwards compatibility
@@ -21,12 +23,16 @@ public class DriversLicenseBarcodeScannerPackage implements ReactPackage {
 
   @Override
   public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-    return Arrays.<ViewManager>asList();
+    return Arrays.<ViewManager>asList(
+        new DriversLicenseBarcodeScannerManager(reactContext)
+    );
   }
 
   @Override
   public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-    return Arrays.<NativeModule>asList(new DriversLicenseBarcodeScannerModule(reactContext));
+    return Arrays.<NativeModule>asList(
+      new DriversLicenseBarcodeScannerModule(reactContext)
+    );
   }
 
   // Deprecated RN 0.47
