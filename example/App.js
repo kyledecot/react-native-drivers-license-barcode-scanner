@@ -5,7 +5,9 @@ import DriversLicenseBarcodeScanner from 'react-native-drivers-license-barcode-s
 export default class App extends React.Component {
   render() {
     return (
-      <DriversLicenseBarcodeScanner />
+      <DriversLicenseBarcodeScanner
+        style={styles.container}
+       />
     );
   }
 }

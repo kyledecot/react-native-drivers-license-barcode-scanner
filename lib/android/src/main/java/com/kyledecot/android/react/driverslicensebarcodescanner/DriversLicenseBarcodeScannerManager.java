@@ -1,6 +1,6 @@
 package com.kyledecot.android.react.driverslicensebarcodescanner;
 
-import android.view.View;
+import com.kyledecot.react.android.driverslicensebarcodescanner.DriversLicenseBarcodeScanner;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -14,16 +14,23 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.facebook.react.uimanager.SimpleViewManager;
 
 import java.util.Map;
+import java.util.Arrays;
 
 import javax.annotation.Nullable;
 
-public class DriversLicenseBarcodeScannerManager extends ViewGroupManager<DriversLicenseBarcodeScanner> {
-  private final ReactApplicationContext appContext;
+public class DriversLicenseBarcodeScannerManager extends SimpleViewManager<DriversLicenseBarcodeScanner> {
+  public static final String REACT_CLASS = "DriversLicenseBarcodeScanner";
+
+  @Override
+  public String getName() {
+    return REACT_CLASS;
+  }
 
   @Override
   protected DriversLicenseBarcodeScanner createViewInstance(ThemedReactContext context) {
-    return new DriversLicenseBarcodeScanner(context, this.appContext);
+    return new DriversLicenseBarcodeScanner(context);
   }
 }

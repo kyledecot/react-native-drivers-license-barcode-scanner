@@ -2,7 +2,6 @@ package com.kyledecot.android.react.driverslicensebarcodescanner.example;
 
 import com.facebook.react.ReactActivity;
 
-
 public class MainActivity extends ReactActivity {
   /**
    * Returns the name of the main component registered from JavaScript.
