@@ -47,4 +47,5 @@ dependencies {
   implementation "com.google.android.gms:play-services-base:$googlePlayServicesVersion"
   implementation "com.google.android.gms:play-services-maps:$googlePlayServicesVersion"
   implementation "com.google.maps.android:android-maps-utils:$androidMapsUtilsVersion"
+  compile files('libs/mwbscanner.jar')
 }

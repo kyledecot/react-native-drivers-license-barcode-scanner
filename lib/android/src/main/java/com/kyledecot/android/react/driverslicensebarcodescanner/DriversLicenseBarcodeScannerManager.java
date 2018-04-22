@@ -15,6 +15,7 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.uimanager.SimpleViewManager;
+import android.util.Log;
 
 import java.util.Map;
 import java.util.Arrays;
@@ -28,6 +29,13 @@ public class DriversLicenseBarcodeScannerManager extends SimpleViewManager<Drive
   public String getName() {
     return REACT_CLASS;
   }
+
+  // @Override
+  // public void onCreate(Bundle icicle) {
+  //     super.onCreate(icicle);
+  //
+  //   Log.i("KYLEDECOT", "onCreate overridden!");
+  // }
 
   @Override
   protected DriversLicenseBarcodeScanner createViewInstance(ThemedReactContext context) {
