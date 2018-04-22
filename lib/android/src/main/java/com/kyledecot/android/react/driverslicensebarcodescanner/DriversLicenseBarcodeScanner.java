@@ -132,223 +132,65 @@ public class DriversLicenseBarcodeScanner extends View {
   public DriversLicenseBarcodeScanner(ThemedReactContext reactContext) {
     super(reactContext);
 
-    // int registerResult = BarcodeScanner.MWBregisterSDK("NEUk2MDE1uCn4q+GyGFy8VGeeLeIcUT5dt6REiaI5lM=", this);
+    int registerResult = BarcodeScanner.MWBregisterSDK("umDQbMBzRwwXVuRPBtLbzcYfPd0SVfpSoq3wVebSGtw=", reactContext);
+
+    switch (registerResult) {
+        case BarcodeScanner.MWB_RTREG_OK:
+            Log.i("MWBregisterSDK", "Registration OK");
+            break;
+        case BarcodeScanner.MWB_RTREG_INVALID_KEY:
+            Log.e("MWBregisterSDK", "Registration Invalid Key");
+            break;
+        case BarcodeScanner.MWB_RTREG_INVALID_CHECKSUM:
+            Log.e("MWBregisterSDK", "Registration Invalid Checksum");
+            break;
+        case BarcodeScanner.MWB_RTREG_INVALID_APPLICATION:
+            Log.e("MWBregisterSDK", "Registration Invalid Application");
+            break;
+        case BarcodeScanner.MWB_RTREG_INVALID_SDK_VERSION:
+            Log.e("MWBregisterSDK", "Registration Invalid SDK Version");
+            break;
+        case BarcodeScanner.MWB_RTREG_INVALID_KEY_VERSION:
+            Log.e("MWBregisterSDK", "Registration Invalid Key Version");
+            break;
+        case BarcodeScanner.MWB_RTREG_INVALID_PLATFORM:
+            Log.e("MWBregisterSDK", "Registration Invalid Platform");
+            break;
+        case BarcodeScanner.MWB_RTREG_KEY_EXPIRED:
+            Log.e("MWBregisterSDK", "Registration Key Expired");
+            break;
+        default:
+            Log.e("MWBregisterSDK", "Registration Unknown Error");
+            break;
+    }
+
+    BarcodeScanner.MWBsetDirection(BarcodeScanner.MWB_SCANDIRECTION_HORIZONTAL);
+    BarcodeScanner.MWBsetActiveCodes(BarcodeScanner.MWB_CODE_MASK_PDF);
+    BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_PDF, RECT_LANDSCAPE_1D);
+    BarcodeScanner.MWBsetLevel(2);
+    BarcodeScanner.MWBsetResultType(USE_RESULT_TYPE);
+
+    CameraManager.init(reactContext.getApplicationContext()); // TODO: is getApplicationContext the right thing to use here?
+
+    initCamera(reactContext);
 
     this.setBackgroundColor(100);
   }
-//
-//   /* Analytics */
-//     /*
-//      * private String encResult; private String tName; private String
-// 	 * analyticsTag = "TestTag";
-// 	 */
-//
-//     private enum State {
-//         STOPPED, PREVIEW, DECODING
-//     }
-//
-    private enum OverlayMode {
-        OM_IMAGE, OM_MWOVERLAY, OM_NONE
-    }
-//
-//     State state = State.STOPPED;
-//
-//     public Handler getHandler() {
-//         return decodeHandler;
-//     }
-//
-//     @Override
-//     public void onCreate(Bundle icicle) {
-//         super.onCreate(icicle);
-//     //     surfaceChanged = false;
-//     //     package_name = getPackageName();
-//     //
-//     //     Window window = getWindow();
-//     //     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-//     //     setContentView(getResources().getIdentifier("activity_capture", "layout", package_name));
-//     //     imageOverlay = (ImageView) findViewById(R.id.imageOverlay);
-//     //     // register your copy of library with given key
-//     //     int registerResult = BarcodeScanner.MWBregisterSDK("SDK_Key", this);
-//     //
-//     //     switch (registerResult) {
-//     //         case BarcodeScanner.MWB_RTREG_OK:
-//     //             Log.i("MWBregisterSDK", "Registration OK");
-//     //             break;
-//     //         case BarcodeScanner.MWB_RTREG_INVALID_KEY:
-//     //             Log.e("MWBregisterSDK", "Registration Invalid Key");
-//     //             break;
-//     //         case BarcodeScanner.MWB_RTREG_INVALID_CHECKSUM:
-//     //             Log.e("MWBregisterSDK", "Registration Invalid Checksum");
-//     //             break;
-//     //         case BarcodeScanner.MWB_RTREG_INVALID_APPLICATION:
-//     //             Log.e("MWBregisterSDK", "Registration Invalid Application");
-//     //             break;
-//     //         case BarcodeScanner.MWB_RTREG_INVALID_SDK_VERSION:
-//     //             Log.e("MWBregisterSDK", "Registration Invalid SDK Version");
-//     //             break;
-//     //         case BarcodeScanner.MWB_RTREG_INVALID_KEY_VERSION:
-//     //             Log.e("MWBregisterSDK", "Registration Invalid Key Version");
-//     //             break;
-//     //         case BarcodeScanner.MWB_RTREG_INVALID_PLATFORM:
-//     //             Log.e("MWBregisterSDK", "Registration Invalid Platform");
-//     //             break;
-//     //         case BarcodeScanner.MWB_RTREG_KEY_EXPIRED:
-//     //             Log.e("MWBregisterSDK", "Registration Key Expired");
-//     //             break;
-//     //
-//     //         default:
-//     //             Log.e("MWBregisterSDK", "Registration Unknown Error");
-//     //             break;
-//     //     }
-//     //
-//     //     // choose code type or types you want to search for
-//     //     if (PDF_OPTIMIZED) {
-//     //         BarcodeScanner.MWBsetDirection(BarcodeScanner.MWB_SCANDIRECTION_HORIZONTAL);
-//     //         BarcodeScanner.MWBsetActiveCodes(BarcodeScanner.MWB_CODE_MASK_PDF);
-//     //         BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_PDF, RECT_LANDSCAPE_1D);
-//     //     } else {
-//     //         // Our sample app is configured by default to search both directions...
-//     //         BarcodeScanner.MWBsetDirection(
-//     //                 BarcodeScanner.MWB_SCANDIRECTION_HORIZONTAL | BarcodeScanner.MWB_SCANDIRECTION_VERTICAL);
-//     //
-//     //         // Our sample app is configured by default to search all supported barcodes...
-//     //         // But for better performance, only activate the symbologies your application requires...
-//     //         BarcodeScanner.MWBsetActiveCodes(
-//     //                 BarcodeScanner.MWB_CODE_MASK_25 | BarcodeScanner.MWB_CODE_MASK_39 | BarcodeScanner.MWB_CODE_MASK_93
-//     //                         | BarcodeScanner.MWB_CODE_MASK_128 | BarcodeScanner.MWB_CODE_MASK_AZTEC
-//     //                         | BarcodeScanner.MWB_CODE_MASK_DM | BarcodeScanner.MWB_CODE_MASK_EANUPC
-//     //                         | BarcodeScanner.MWB_CODE_MASK_PDF | BarcodeScanner.MWB_CODE_MASK_QR
-//     //                         | BarcodeScanner.MWB_CODE_MASK_CODABAR | BarcodeScanner.MWB_CODE_MASK_11
-//     //                         | BarcodeScanner.MWB_CODE_MASK_MAXICODE | BarcodeScanner.MWB_CODE_MASK_POSTAL
-//     //                         | BarcodeScanner.MWB_CODE_MASK_MSI | BarcodeScanner.MWB_CODE_MASK_RSS);
-//     //
-//     //         // set the scanning rectangle based on scan direction(format in pct:
-//     //         // x, y, width, height)
-//     //         BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_25, RECT_FULL_1D);
-//     //         BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_39, RECT_FULL_1D);
-//     //         BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_93, RECT_FULL_1D);
-//     //         BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_128, RECT_FULL_1D);
-//     //         BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_AZTEC, RECT_FULL_2D);
-//     //         BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_DM, RECT_FULL_2D);
-//     //         BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_EANUPC, RECT_FULL_1D);
-//     //         BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_PDF, RECT_FULL_1D);
-//     //         BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_QR, RECT_FULL_2D);
-//     //         BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_RSS, RECT_FULL_1D);
-//     //         BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_CODABAR, RECT_FULL_1D);
-//     //         BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_DOTCODE, RECT_DOTCODE);
-//     //         BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_11, RECT_FULL_1D);
-//     //         BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_MSI, RECT_FULL_1D);
-//     //         BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_MAXICODE, RECT_FULL_1D);
-//     //         BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_POSTAL, RECT_FULL_1D);
-//     //
-//     //     }
-//     //
-//     //     if (OVERLAY_MODE == OverlayMode.OM_IMAGE) {
-//     //         imageOverlay.setVisibility(View.VISIBLE);
-//     //     }
-//     //
-// 		// /* Analytics */
-//     //     /*
-//     //      * Register with given apiUser and apiKey
-// 		//  */
-//     //     //
-//     //     // if (USE_MWANALYTICS) {
-//     //     // MWBAnalytics.init(getApplicationContext(), "apiUser", "apiKey");
-//     //     // }
-//     //
-//     //     // For better performance, set like this for PORTRAIT scanning...
-//     //     // BarcodeScanner.MWBsetDirection(BarcodeScanner.MWB_SCANDIRECTION_VERTICAL);
-//     //     // set the scanning rectangle based on scan direction(format in pct: x,
-//     //     // y, width, height)
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_25,
-//     //     // RECT_PORTRAIT_1D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_39,
-//     //     // RECT_PORTRAIT_1D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_93,
-//     //     // RECT_PORTRAIT_1D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_128,
-//     //     // RECT_PORTRAIT_1D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_AZTEC,
-//     //     // RECT_PORTRAIT_2D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_DM,
-//     //     // RECT_PORTRAIT_2D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_EANUPC,
-//     //     // RECT_PORTRAIT_1D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_PDF,
-//     //     // RECT_PORTRAIT_1D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_QR,
-//     //     // RECT_PORTRAIT_2D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_RSS,
-//     //     // RECT_PORTRAIT_1D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_CODABAR,RECT_PORTRAIT_1D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_DOTCODE,RECT_DOTCODE);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_11,
-//     //     // RECT_PORTRAIT_1D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_MSI,
-//     //     // RECT_PORTRAIT_1D);
-//     //
-//     //     // or like this for LANDSCAPE scanning - Preferred for dense or wide
-//     //     // codes...
-//     //     // BarcodeScanner.MWBsetDirection(BarcodeScanner.MWB_SCANDIRECTION_HORIZONTAL);
-//     //     // set the scanning rectangle based on scan direction(format in pct: x,
-//     //     // y, width, height)
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_25,
-//     //     // RECT_LANDSCAPE_1D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_39,
-//     //     // RECT_LANDSCAPE_1D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_93,
-//     //     // RECT_LANDSCAPE_1D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_128,
-//     //     // RECT_LANDSCAPE_1D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_AZTEC,
-//     //     // RECT_LANDSCAPE_2D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_DM,
-//     //     // RECT_LANDSCAPE_2D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_EANUPC,
-//     //     // RECT_LANDSCAPE_1D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_PDF,
-//     //     // RECT_LANDSCAPE_1D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_QR,
-//     //     // RECT_LANDSCAPE_2D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_RSS,
-//     //     // RECT_LANDSCAPE_1D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_CODABAR,RECT_LANDSCAPE_1D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_DOTCODE,RECT_DOTCODE);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_11,
-//     //     // RECT_LANDSCAPE_1D);
-//     //     // BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_MSI,
-//     //     // RECT_LANDSCAPE_1D);
-//     //
-//     //     // set decoder effort level (1 - 5)
-//     //     // for live scanning scenarios, a setting between 1 to 3 will suffice
-//     //     // levels 4 and 5 are typically reserved for batch scanning
-//     //     BarcodeScanner.MWBsetLevel(2);
-//     //     BarcodeScanner.MWBsetResultType(USE_RESULT_TYPE);
-//     //
-//     //     // Set minimum result length for low-protected barcode types
-//     //     BarcodeScanner.MWBsetMinLength(BarcodeScanner.MWB_CODE_MASK_25, 5);
-//     //     BarcodeScanner.MWBsetMinLength(BarcodeScanner.MWB_CODE_MASK_MSI, 5);
-//     //     BarcodeScanner.MWBsetMinLength(BarcodeScanner.MWB_CODE_MASK_39, 5);
-//     //     BarcodeScanner.MWBsetMinLength(BarcodeScanner.MWB_CODE_MASK_CODABAR, 5);
-//     //     BarcodeScanner.MWBsetMinLength(BarcodeScanner.MWB_CODE_MASK_11, 5);
-//     //
-//     //     // Set adittional options for GS1 and ECI
-//     //     // BarcodeScanner.MWBsetParam(BarcodeScanner.MWB_CODE_MASK_DM,
-//     //     // BarcodeScanner.MWB_PAR_ID_ECI_MODE,
-//     //     // BarcodeScanner.MWB_PAR_VALUE_ECI_ENABLED);
-//     //     // BarcodeScanner.MWBsetParam(BarcodeScanner.MWB_CODE_MASK_DM,
-//     //     // BarcodeScanner.MWB_PAR_ID_RESULT_PREFIX,
-//     //     // BarcodeScanner.MWB_PAR_VALUE_RESULT_PREFIX_ALWAYS);
-//     //     // BarcodeScanner.MWBsetParam(BarcodeScanner.MWB_CODE_MASK_128,
-//     //     // BarcodeScanner.MWB_PAR_ID_RESULT_PREFIX,
-//     //     // BarcodeScanner.MWB_PAR_VALUE_RESULT_PREFIX_ALWAYS);
-//     //     // BarcodeScanner.MWBsetParam(BarcodeScanner.MWB_CODE_MASK_QR,
-//     //     // BarcodeScanner.MWB_PAR_ID_RESULT_PREFIX,
-//     //     // BarcodeScanner.MWB_PAR_VALUE_RESULT_PREFIX_ALWAYS);
-//     //
-//     //     // BarcodeScanner.MWBsetFlags(BarcodeScanner.MWB_CODE_MASK_EANUPC,
-//     //     // BarcodeScanner.MWB_CFG_EANUPC_DISABLE_ADDON);
-//     //
+
+  private enum State {
+      STOPPED, PREVIEW, DECODING
+  }
+
+  private enum OverlayMode {
+      OM_IMAGE, OM_MWOVERLAY, OM_NONE
+  }
+
+  State state = State.STOPPED;
+
+  public Handler getHandler() {
+      return decodeHandler;
+  }
+
 //     //     CameraManager.init(getApplication());
 //     //
 //     //     hasSurface = false;
@@ -719,106 +561,110 @@ public class DriversLicenseBarcodeScanner extends View {
 // 		 */
 //     }
 //
-//     private void initCamera() {
-//         //
-//         // if (ContextCompat.checkSelfPermission(DriversLicenseBarcodeScanner.this,
-//         //         Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-//         //     /* WHEN TARGETING ANDROID 6 OR ABOVE, PERMISSION IS NEEDED */
-//         //     if (ActivityCompat.shouldShowRequestPermissionRationale(DriversLicenseBarcodeScanner.this,
-//         //             Manifest.permission.CAMERA)) {
-//         //
-//         //         new AlertDialog.Builder(DriversLicenseBarcodeScanner.this).setMessage("You need to allow access to the Camera")
-//         //                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//         //                     @Override
-//         //                     public void onClick(DialogInterface dialogInterface, int i) {
-//         //                         ActivityCompat.requestPermissions(DriversLicenseBarcodeScanner.this,
-//         //                                 new String[]{Manifest.permission.CAMERA}, 12322);
-//         //                     }
-//         //                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//         //             @Override
-//         //             public void onClick(DialogInterface dialogInterface, int i) {
-//         //                 onBackPressed();
-//         //             }
-//         //         }).create().show();
-//         //     } else {
-//         //         ActivityCompat.requestPermissions(DriversLicenseBarcodeScanner.this, new String[]{Manifest.permission.CAMERA},
-//         //                 12322);
-//         //     }
-//         // } else {
-//         //     try {
-//         //         // Select desired camera resoloution. Not all devices
-//         //         // supports all
-//         //         // resolutions, closest available will be chosen
-//         //         // If not selected, closest match to screen resolution will
-//         //         // be
-//         //         // chosen
-//         //         // High resolutions will slow down scanning proccess on
-//         //         // slower
-//         //         // devices
-//         //
-//         //         if (MAX_THREADS > 2 || PDF_OPTIMIZED) {
-//         //             CameraManager.setDesiredPreviewSize(1280, 720);
-//         //         } else {
-//         //             CameraManager.setDesiredPreviewSize(800, 480);
-//         //         }
-//         //
-//         //         CameraManager.get().openDriver(surfaceHolder,
-//         //                 (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT));
-//         //
-//         //         int maxZoom = CameraManager.get().getMaxZoom();
-//         //         if (maxZoom < 100) {
-//         //             zoomButton.setVisibility(View.GONE);
-//         //         } else {
-//         //             zoomButton.setVisibility(View.VISIBLE);
-//         //             if (maxZoom < 300) {
-//         //                 secondZoom = maxZoom;
-//         //                 firstZoom = (maxZoom - 100) / 2 + 100;
-//         //
-//         //             }
-//         //
-//         //         }
-//         //     } catch (IOException ioe) {
-//         //         displayFrameworkBugMessageAndExit(ioe.getMessage());
-//         //         return;
-//         //     } catch (RuntimeException e) {
-//         //         // Barcode Scanner has seen crashes in the wild of this
-//         //         // variety:
-//         //         // java.?lang.?RuntimeException: Fail to connect to camera
-//         //         // service
-//         //         displayFrameworkBugMessageAndExit(e.getMessage());
-//         //         return;
-//         //     }
-//         //
-//         //     Log.i("preview", "start preview.");
-//         //
-//         //     flashOn = false;
-//         //
-//         //     new Handler().postDelayed(new Runnable() {
-//         //
-//         //         @Override
-//         //         public void run() {
-//         //             switch (zoomLevel) {
-//         //                 case 0:
-//         //                     CameraManager.get().setZoom(100);
-//         //                     break;
-//         //                 case 1:
-//         //                     CameraManager.get().setZoom(firstZoom);
-//         //                     break;
-//         //                 case 2:
-//         //                     CameraManager.get().setZoom(secondZoom);
-//         //                     break;
-//         //
-//         //                 default:
-//         //                     break;
-//         //             }
-//         //
-//         //         }
-//         //     }, 300);
-//         //     CameraManager.get().startPreview();
-//         //     restartPreviewAndDecode();
-//         //     updateFlash();
-//         // }
-//     }
+  private void initCamera(ThemedReactContext reactContext) {
+      if (ContextCompat.checkSelfPermission(reactContext,
+              Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                Log.e("KYLEDECOT", "NO NO NO PERMISSIONS GRANTED");
+
+                // this.getCurrentActivity();
+          /* WHEN TARGETING ANDROID 6 OR ABOVE, PERMISSION IS NEEDED */
+          // if (ActivityCompat.shouldShowRequestPermissionRationale(getContext(),
+          //         Manifest.permission.CAMERA)) {
+          //
+          //     new AlertDialog.Builder(getContext()).setMessage("You need to allow access to the Camera")
+          //             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+          //                 @Override
+          //                 public void onClick(DialogInterface dialogInterface, int i) {
+          //                     ActivityCompat.requestPermissions(getContext(),
+          //                             new String[]{Manifest.permission.CAMERA}, 12322);
+          //                 }
+          //             }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+          //         @Override
+          //         public void onClick(DialogInterface dialogInterface, int i) {
+          //             onBackPressed();
+          //         }
+          //     }).create().show();
+          // } else {
+          //     ActivityCompat.requestPermissions(getContext(), new String[]{Manifest.permission.CAMERA},
+          //             12322);
+          // }
+      } else {
+         Log.e("KYLEDECOT", "PERMISSIONS GRANTED ALREADY!!!!");
+
+      //     try {
+      //         // Select desired camera resoloution. Not all devices
+      //         // supports all
+      //         // resolutions, closest available will be chosen
+      //         // If not selected, closest match to screen resolution will
+      //         // be
+      //         // chosen
+      //         // High resolutions will slow down scanning proccess on
+      //         // slower
+      //         // devices
+      //
+      //         if (MAX_THREADS > 2 || PDF_OPTIMIZED) {
+      //             CameraManager.setDesiredPreviewSize(1280, 720);
+      //         } else {
+      //             CameraManager.setDesiredPreviewSize(800, 480);
+      //         }
+      //
+      //         CameraManager.get().openDriver(surfaceHolder,
+      //                 (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT));
+      //
+      //         int maxZoom = CameraManager.get().getMaxZoom();
+      //         if (maxZoom < 100) {
+      //             zoomButton.setVisibility(View.GONE);
+      //         } else {
+      //             zoomButton.setVisibility(View.VISIBLE);
+      //             if (maxZoom < 300) {
+      //                 secondZoom = maxZoom;
+      //                 firstZoom = (maxZoom - 100) / 2 + 100;
+      //
+      //             }
+      //
+      //         }
+      //     } catch (IOException ioe) {
+      //         displayFrameworkBugMessageAndExit(ioe.getMessage());
+      //         return;
+      //     } catch (RuntimeException e) {
+      //         // Barcode Scanner has seen crashes in the wild of this
+      //         // variety:
+      //         // java.?lang.?RuntimeException: Fail to connect to camera
+      //         // service
+      //         displayFrameworkBugMessageAndExit(e.getMessage());
+      //         return;
+      //     }
+      //
+      //     Log.i("preview", "start preview.");
+      //
+      //     flashOn = false;
+      //
+      //     new Handler().postDelayed(new Runnable() {
+      //
+      //         @Override
+      //         public void run() {
+      //             switch (zoomLevel) {
+      //                 case 0:
+      //                     CameraManager.get().setZoom(100);
+      //                     break;
+      //                 case 1:
+      //                     CameraManager.get().setZoom(firstZoom);
+      //                     break;
+      //                 case 2:
+      //                     CameraManager.get().setZoom(secondZoom);
+      //                     break;
+      //
+      //                 default:
+      //                     break;
+      //             }
+      //
+      //         }
+      //     }, 300);
+      //     CameraManager.get().startPreview();
+      //     restartPreviewAndDecode();
+      //     updateFlash();
+      }
+  }
 //
 //     private void displayFrameworkBugMessageAndExit(String message) {
 //         // AlertDialog.Builder builder = new AlertDialog.Builder(this);
