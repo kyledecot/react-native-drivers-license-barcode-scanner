@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kyledecot.android.react.driverslicensebarcodescanner.example">
+    package="com.kyledecot.react.android.driverslicensebarcodescanner.example">
 
     <uses-permission android:name="android.permission.INTERNET" />
 

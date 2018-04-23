@@ -14,7 +14,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.kyledecot.android.react.driverslicensebarcodescanner.DriversLicenseBarcodeScannerManager;
 import com.manateeworks.BarcodeScanner;
 import com.manateeworks.CameraManager;
 import com.manateeworks.MWParser;
@@ -170,43 +169,43 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
 
 
       //
-      int registerResult = BarcodeScanner.MWBregisterSDK("umDQbMBzRwwXVuRPBtLbzcYfPd0SVfpSoq3wVebSGtw=", this.appContext.getCurrentActivity());
-
-      switch (registerResult) {
-          case BarcodeScanner.MWB_RTREG_OK:
-              Log.i("MWBregisterSDK", "Registration OK");
-              break;
-          case BarcodeScanner.MWB_RTREG_INVALID_KEY:
-              Log.e("MWBregisterSDK", "Registration Invalid Key");
-              break;
-          case BarcodeScanner.MWB_RTREG_INVALID_CHECKSUM:
-              Log.e("MWBregisterSDK", "Registration Invalid Checksum");
-              break;
-          case BarcodeScanner.MWB_RTREG_INVALID_APPLICATION:
-              Log.e("MWBregisterSDK", "Registration Invalid Application");
-              break;
-          case BarcodeScanner.MWB_RTREG_INVALID_SDK_VERSION:
-              Log.e("MWBregisterSDK", "Registration Invalid SDK Version");
-              break;
-          case BarcodeScanner.MWB_RTREG_INVALID_KEY_VERSION:
-              Log.e("MWBregisterSDK", "Registration Invalid Key Version");
-              break;
-          case BarcodeScanner.MWB_RTREG_INVALID_PLATFORM:
-              Log.e("MWBregisterSDK", "Registration Invalid Platform");
-              break;
-          case BarcodeScanner.MWB_RTREG_KEY_EXPIRED:
-              Log.e("MWBregisterSDK", "Registration Key Expired");
-              break;
-          default:
-              Log.e("MWBregisterSDK", "Registration Unknown Error");
-              break;
-      }
-
-      BarcodeScanner.MWBsetDirection(BarcodeScanner.MWB_SCANDIRECTION_HORIZONTAL);
-      BarcodeScanner.MWBsetActiveCodes(BarcodeScanner.MWB_CODE_MASK_PDF);
-      BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_PDF, RECT_LANDSCAPE_1D);
-      BarcodeScanner.MWBsetLevel(2);
-      BarcodeScanner.MWBsetResultType(USE_RESULT_TYPE);
+//      int registerResult = BarcodeScanner.MWBregisterSDK("umDQbMBzRwwXVuRPBtLbzcYfPd0SVfpSoq3wVebSGtw=", this.appContext.getCurrentActivity());
+//
+//      switch (registerResult) {
+//          case BarcodeScanner.MWB_RTREG_OK:
+//              Log.i("MWBregisterSDK", "Registration OK");
+//              break;
+//          case BarcodeScanner.MWB_RTREG_INVALID_KEY:
+//              Log.e("MWBregisterSDK", "Registration Invalid Key");
+//              break;
+//          case BarcodeScanner.MWB_RTREG_INVALID_CHECKSUM:
+//              Log.e("MWBregisterSDK", "Registration Invalid Checksum");
+//              break;
+//          case BarcodeScanner.MWB_RTREG_INVALID_APPLICATION:
+//              Log.e("MWBregisterSDK", "Registration Invalid Application");
+//              break;
+//          case BarcodeScanner.MWB_RTREG_INVALID_SDK_VERSION:
+//              Log.e("MWBregisterSDK", "Registration Invalid SDK Version");
+//              break;
+//          case BarcodeScanner.MWB_RTREG_INVALID_KEY_VERSION:
+//              Log.e("MWBregisterSDK", "Registration Invalid Key Version");
+//              break;
+//          case BarcodeScanner.MWB_RTREG_INVALID_PLATFORM:
+//              Log.e("MWBregisterSDK", "Registration Invalid Platform");
+//              break;
+//          case BarcodeScanner.MWB_RTREG_KEY_EXPIRED:
+//              Log.e("MWBregisterSDK", "Registration Key Expired");
+//              break;
+//          default:
+//              Log.e("MWBregisterSDK", "Registration Unknown Error");
+//              break;
+//      }
+//
+//      BarcodeScanner.MWBsetDirection(BarcodeScanner.MWB_SCANDIRECTION_HORIZONTAL);
+//      BarcodeScanner.MWBsetActiveCodes(BarcodeScanner.MWB_CODE_MASK_PDF);
+//      BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_PDF, RECT_LANDSCAPE_1D);
+//      BarcodeScanner.MWBsetLevel(2);
+//      BarcodeScanner.MWBsetResultType(USE_RESULT_TYPE);
 
 //      Activity activity = context.getCurrentActivity();
 //

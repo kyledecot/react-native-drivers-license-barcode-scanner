@@ -1,4 +1,4 @@
-package com.kyledecot.android.react.driverslicensebarcodescanner.example;
+package com.kyledecot.react.android.driverslicensebarcodescanner.example;
 
 import com.facebook.react.ReactActivity;
 

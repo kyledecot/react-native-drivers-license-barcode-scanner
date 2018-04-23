@@ -1,4 +1,4 @@
-package com.kyledecot.android.react.driverslicensebarcodescanner;
+package com.kyledecot.react.android.driverslicensebarcodescanner;
 
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.kyledecot.react.android.driverslicensebarcodescanner.DriversLicenseBarcodeScanner;

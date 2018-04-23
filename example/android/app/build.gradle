@@ -88,7 +88,7 @@ android {
     buildToolsVersion '27.0.3'
 
     defaultConfig {
-        applicationId "com.kyledecot.android.react.driverslicensebarcodescanner.example"
+        applicationId "com.kyledecot.react.android.driverslicensebarcodescanner.example"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1

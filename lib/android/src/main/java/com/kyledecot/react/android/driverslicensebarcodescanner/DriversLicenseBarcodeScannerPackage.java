@@ -1,4 +1,7 @@
-package com.kyledecot.android.react.driverslicensebarcodescanner;
+package com.kyledecot.react.android.driverslicensebarcodescanner;
+
+// import com.kyledecot.react.android.driverslicensebarcodescanner.DriversLicenseBarcodeScannerPackage;
+import com.kyledecot.react.android.driverslicensebarcodescanner.DriversLicenseBarcodeScannerManager;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
@@ -12,7 +15,7 @@ public class DriversLicenseBarcodeScannerPackage implements ReactPackage {
   @Override
    public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
      return Arrays.<ViewManager>asList(
-       new DriversLicenseBarcodeScannerManager(reactContext)
+       new DriversLicenseBarcodeScannerManager()
      );
    }
 
