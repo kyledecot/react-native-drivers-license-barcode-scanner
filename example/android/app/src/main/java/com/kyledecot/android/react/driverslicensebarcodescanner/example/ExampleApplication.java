@@ -26,7 +26,8 @@ public class ExampleApplication extends Application implements ReactApplication 
     @Override protected List<ReactPackage> getPackages() {
       return Arrays.asList(
           new MainReactPackage(),
-          new DriversLicenseBarcodeScannerPackage());
+          new DriversLicenseBarcodeScannerPackage()
+      );
     }
   };
 
@@ -38,6 +39,7 @@ public class ExampleApplication extends Application implements ReactApplication 
   @Override
   public void onCreate() {
     super.onCreate();
+
     SoLoader.init(this, /* native exopackage */ false);
   }
 }
