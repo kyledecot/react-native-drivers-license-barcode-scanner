@@ -1,8 +1,5 @@
 package com.kyledecot.react.android.driverslicensebarcodescanner;
 
-// import com.kyledecot.react.android.driverslicensebarcodescanner.DriversLicenseBarcodeScannerPackage;
-import com.kyledecot.react.android.driverslicensebarcodescanner.DriversLicenseBarcodeScannerManager;
-
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
