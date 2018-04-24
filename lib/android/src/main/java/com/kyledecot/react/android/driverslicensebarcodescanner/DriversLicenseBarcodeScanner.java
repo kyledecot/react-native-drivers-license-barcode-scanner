@@ -19,12 +19,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.manateeworks.BarcodeScanner;
 import com.manateeworks.CameraManager;
 import com.manateeworks.MWParser;
-
-import com.manateeworks.BarcodeScanner;
 import com.manateeworks.BarcodeScanner.MWResult;
-import com.manateeworks.CameraManager;
-import com.manateeworks.MWOverlay;
-import com.manateeworks.MWParser;
 
 import java.io.IOException;
 
@@ -88,8 +83,6 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
         super(reactContext);
 
         this.appContext = appContext;
-
-        Log.e("KYLEDECOT", "constructed surface view instance");
     }
 
     private void initCamera() {
@@ -100,11 +93,7 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
             return;
         }
 
-        Log.e("CAMERA", "WE DID IT!");
-
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            Log.e("KYLEDECOT", "NO NO NO PERMISSIONS GRANTED");
-
             /* WHEN TARGETING ANDROID 6 OR ABOVE, PERMISSION IS NEEDED */
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
                     Manifest.permission.CAMERA)) {
@@ -127,8 +116,6 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
                         12322);
             }
         } else {
-            Log.e("KYLEDECOT", "PERMISSIONS GRANTED ALREADY!!!!");
-
             try {
                 // Select desired camera resoloution. Not all devices
                 // supports all
@@ -160,15 +147,9 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
                 return;
             }
 
-            Log.i("preview", "start preview.");
-
-
             CameraManager.get().startPreview();
             restartPreviewAndDecode();
-////                 updateFlash();
         }
-
-        Log.e("KYLEDECOT", "INIT CAMERA");
     }
 
     public Handler getDecodeHandler() {
@@ -179,28 +160,19 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
         if (state == State.STOPPED) {
             state = State.PREVIEW;
 
-            Handler handler = getDecodeHandler();
-
-            Log.i("preview", "requestPreviewFrame.");
             CameraManager.get().requestPreviewFrame(getDecodeHandler(), ID_DECODE);
 //             CameraManager.get().requestAutoFocus(getDecodeHandler(), ID_AUTO_FOCUS);
         }
     }
 
   public void onResume() {
-//    getHolder().addCallback(this);
-
-
       if (hasSurface) {
           Log.i("Init Camera", "On resume");
           initCamera();
       } else if (getHolder() != null) {
-          // Install the callback and wait for surfaceCreated() to init the
-          // camera.
           getHolder().addCallback(this);
       }
-
-      //
+      
       int registerResult = BarcodeScanner.MWBregisterSDK("umDQbMBzRwwXVuRPBtLbzcYfPd0SVfpSoq3wVebSGtw=", this.appContext.getCurrentActivity());
 
       switch (registerResult) {
@@ -300,9 +272,7 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
         hasSurface = false;
     }
 
-
     private void decode(final byte[] data, final int width, final int height) {
-
         if (activeThreads >= MAX_THREADS || state == State.STOPPED) {
             return;
         }
@@ -354,114 +324,8 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     }
 
     public void handleDecode(MWResult result) {
-
-        String typeName = result.typeName;
         String barcode = result.text;
 
-        /* Parser */
-        /*
-         * Parser result handler. Edit this code for custom handling of the
-         * parser result. Use MWParser.MWPgetJSON(MWPARSER_MASK,
-         * result.encryptedResult.getBytes()); to get JSON formatted result
-         */
-//        if (MWPARSER_MASK != MWParser.MWP_PARSER_MASK_NONE &&
-//                BarcodeScanner.MWBgetResultType() ==
-//                        BarcodeScanner.MWB_RESULT_TYPE_MW) {
-//
-//            barcode = MWParser.MWPgetFormattedText(MWPARSER_MASK,
-//                    result.encryptedResult.getBytes());
-//            if (barcode == null) {
-//                String parserMask = "";
-//
-//                switch (MWPARSER_MASK) {
-//                    case MWParser.MWP_PARSER_MASK_AAMVA:
-//                        parserMask = "AAMVA";
-//                        break;
-//                    case MWParser.MWP_PARSER_MASK_GS1:
-//                        parserMask = "GS1";
-//                        break;
-//                    case MWParser.MWP_PARSER_MASK_ISBT:
-//                        parserMask = "ISBT";
-//                        break;
-//                    case MWParser.MWP_PARSER_MASK_IUID:
-//                        parserMask = "IUID";
-//                        break;
-//                    case MWParser.MWP_PARSER_MASK_HIBC:
-//                        parserMask = "HIBC";
-//                        break;
-//                    case MWParser.MWP_PARSER_MASK_SCM:
-//                        parserMask = "SCM";
-//                        break;
-//
-//                    default:
-//                        parserMask = "unknown";
-//                        break;
-//                }
-//
-//                barcode = result.text + "\n*Not a valid " + parserMask +
-//                        " formatted barcode";
-//            }
-//
-//        }
-        /* Parser */
-
-
-//        if (result.locationPoints != null && CameraManager.get().
-//
-//                getCurrentResolution()
-//
-//                != null
-//                && OVERLAY_MODE == OverlayMode.OM_MWOVERLAY)
-//
-//        {
-//
-//            MWOverlay.showLocation(result.locationPoints.points, result.imageWidth, result.imageHeight);
-//        }
-
-        if (result.isGS1)
-
-        {
-            typeName += " (GS1)";
-        }
-
         Log.e("KYLEDECOT", barcode);
-
-
-//        new AlertDialog.Builder(this)
-//                .setOnDismissListener(new DialogInterface.OnDismissListener() {
-//                    @Override
-//                    public void onDismiss(DialogInterface dialog) {
-//                        if (decodeHandler != null) {
-//                            decodeHandler.sendEmptyMessage(ID_RESTART_PREVIEW);
-//                        }
-//                    }
-//                })
-//                .setTitle(typeName)
-//                .setMessage(barcode)
-//                .setNegativeButton("Close", null)
-//                .show();
-
-        /* Analytics */
-        /*
-         * Replace "TestTag" in order to send custom tag.
-         */
-        /*
-         * if (USE_MWANALYTICS) { if
-         * (ContextCompat.checkSelfPermission(ActivityCapture.this,
-         * Manifest.permission.ACCESS_FINE_LOCATION) !=
-         * PackageManager.PERMISSION_GRANTED) { encResult =
-         * result.encryptedResult; tName = typeName;
-         *
-         * if
-         * (ActivityCompat.shouldShowRequestPermissionRationale(ActivityCapture.
-         * this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-         * MWBAnalytics.MWB_sendReport(result.encryptedResult, typeName,
-         * analyticsTag); } else {
-         * ActivityCompat.requestPermissions(ActivityCapture.this, new String[]
-         * { Manifest.permission.ACCESS_FINE_LOCATION }, 12333); } } else { if
-         * (encResult != null) { encResult = null; tName = null; }
-         * MWBAnalytics.MWB_sendReport(result.encryptedResult, typeName,
-         * analyticsTag); } }
-         */
     }
 }
