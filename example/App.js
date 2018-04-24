@@ -1,6 +1,6 @@
-import React from "react";
-import { StyleSheet } from "react-native";
-import DriversLicenseBarcodeScanner from "react-native-drivers-license-barcode-scanner";
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import DriversLicenseBarcodeScanner from 'react-native-drivers-license-barcode-scanner';
 
 export default class App extends React.Component {
   render() {
@@ -15,9 +15,8 @@ export default class App extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.5,
-    backgroundColor: "#fd0",
-    alignItems: "center",
-    justifyContent: "center"
-  }
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

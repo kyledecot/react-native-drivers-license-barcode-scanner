@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +18,12 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.manateeworks.BarcodeScanner;
 import com.manateeworks.CameraManager;
+import com.manateeworks.MWParser;
+
+import com.manateeworks.BarcodeScanner;
+import com.manateeworks.BarcodeScanner.MWResult;
+import com.manateeworks.CameraManager;
+import com.manateeworks.MWOverlay;
 import com.manateeworks.MWParser;
 
 import java.io.IOException;
@@ -35,10 +42,6 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     }
 
     State state = State.STOPPED;
-
-//    public Handler getHandler() {
-//        return decodeHandler;
-//    }
 
     /* Parser */
     /*
@@ -77,7 +80,6 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     private int activeThreads = 0;
     public static int MAX_THREADS = Runtime.getRuntime().availableProcessors();
 
-    private SurfaceHolder surfaceHolder;
     private boolean surfaceChanged = false;
 
     private ReactApplicationContext appContext;
@@ -138,13 +140,13 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
                 // slower
                 // devices
 
-                if (MAX_THREADS > 2 || PDF_OPTIMIZED) {
+                if (MAX_THREADS > 2) {
                     CameraManager.setDesiredPreviewSize(1280, 720);
                 } else {
                     CameraManager.setDesiredPreviewSize(800, 480);
                 }
 
-                CameraManager.get().openDriver(surfaceHolder, true);
+                CameraManager.get().openDriver(getHolder(), true);
 
             } catch (IOException ioe) {
 //                 displayFrameworkBugMessageAndExit(ioe.getMessage());
@@ -165,14 +167,23 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
             restartPreviewAndDecode();
 ////                 updateFlash();
         }
+
+        Log.e("KYLEDECOT", "INIT CAMERA");
+    }
+
+    public Handler getDecodeHandler() {
+        return decodeHandler;
     }
 
     private void restartPreviewAndDecode() {
         if (state == State.STOPPED) {
             state = State.PREVIEW;
+
+            Handler handler = getDecodeHandler();
+
             Log.i("preview", "requestPreviewFrame.");
-            CameraManager.get().requestPreviewFrame(getHandler(), ID_DECODE);
-            CameraManager.get().requestAutoFocus(getHandler(), ID_AUTO_FOCUS);
+            CameraManager.get().requestPreviewFrame(getDecodeHandler(), ID_DECODE);
+//             CameraManager.get().requestAutoFocus(getDecodeHandler(), ID_AUTO_FOCUS);
         }
     }
 
@@ -183,10 +194,10 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
       if (hasSurface) {
           Log.i("Init Camera", "On resume");
           initCamera();
-      } else if (surfaceHolder != null) {
+      } else if (getHolder() != null) {
           // Install the callback and wait for surfaceCreated() to init the
           // camera.
-          surfaceHolder.addCallback(this);
+          getHolder().addCallback(this);
       }
 
       //
@@ -234,6 +245,33 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
 
       hasSurface = false;
       state = State.STOPPED;
+      decodeHandler = new Handler(new Handler.Callback() {
+
+          @Override
+          public boolean handleMessage(Message msg) {
+              switch (msg.what) {
+                  case ID_DECODE:
+                      decode((byte[]) msg.obj, msg.arg1, msg.arg2);
+                      break;
+
+                  case ID_AUTO_FOCUS:
+                      if (state == State.PREVIEW || state == State.DECODING) {
+                          CameraManager.get().requestAutoFocus(decodeHandler, ID_AUTO_FOCUS);
+                      }
+                      break;
+                  case ID_RESTART_PREVIEW:
+                      restartPreviewAndDecode();
+                      break;
+                  case ID_DECODE_SUCCEED:
+                      state = State.STOPPED;
+                      handleDecode((MWResult) msg.obj);
+                      break;
+                  case ID_DECODE_FAILED:
+                      break;
+              }
+              return false;
+          }
+      });
   }
 
   public void onPause() {
@@ -260,5 +298,170 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         hasSurface = false;
+    }
+
+
+    private void decode(final byte[] data, final int width, final int height) {
+
+        if (activeThreads >= MAX_THREADS || state == State.STOPPED) {
+            return;
+        }
+
+        new Thread(new Runnable() {
+            public void run() {
+                activeThreads++;
+
+                byte[] rawResult = BarcodeScanner.MWBscanGrayscaleImage(data, width, height);
+
+                if (state == State.STOPPED) {
+                    activeThreads--;
+                    return;
+                }
+
+                MWResult mwResult = null;
+
+                if (rawResult != null && BarcodeScanner.MWBgetResultType() == BarcodeScanner.MWB_RESULT_TYPE_MW) {
+
+                    BarcodeScanner.MWResults results = new BarcodeScanner.MWResults(rawResult);
+
+                    if (results.count > 0) {
+                        mwResult = results.getResult(0);
+                        rawResult = mwResult.bytes;
+                    }
+
+                } else if (rawResult != null
+                        && BarcodeScanner.MWBgetResultType() == BarcodeScanner.MWB_RESULT_TYPE_RAW) {
+                    mwResult = new MWResult();
+                    mwResult.bytes = rawResult;
+                    mwResult.text = rawResult.toString();
+                    mwResult.type = BarcodeScanner.MWBgetLastType();
+                    mwResult.bytesLength = rawResult.length;
+                }
+
+                if (mwResult != null) {
+                    state = State.STOPPED;
+                    Message message = Message.obtain(getDecodeHandler(), ID_DECODE_SUCCEED, mwResult);
+                    message.arg1 = mwResult.type;
+                    message.sendToTarget();
+                } else {
+                    Message message = Message.obtain(getDecodeHandler(), ID_DECODE_FAILED);
+                    message.sendToTarget();
+                }
+
+                activeThreads--;
+            }
+        }).start();
+    }
+
+    public void handleDecode(MWResult result) {
+
+        String typeName = result.typeName;
+        String barcode = result.text;
+
+        /* Parser */
+        /*
+         * Parser result handler. Edit this code for custom handling of the
+         * parser result. Use MWParser.MWPgetJSON(MWPARSER_MASK,
+         * result.encryptedResult.getBytes()); to get JSON formatted result
+         */
+//        if (MWPARSER_MASK != MWParser.MWP_PARSER_MASK_NONE &&
+//                BarcodeScanner.MWBgetResultType() ==
+//                        BarcodeScanner.MWB_RESULT_TYPE_MW) {
+//
+//            barcode = MWParser.MWPgetFormattedText(MWPARSER_MASK,
+//                    result.encryptedResult.getBytes());
+//            if (barcode == null) {
+//                String parserMask = "";
+//
+//                switch (MWPARSER_MASK) {
+//                    case MWParser.MWP_PARSER_MASK_AAMVA:
+//                        parserMask = "AAMVA";
+//                        break;
+//                    case MWParser.MWP_PARSER_MASK_GS1:
+//                        parserMask = "GS1";
+//                        break;
+//                    case MWParser.MWP_PARSER_MASK_ISBT:
+//                        parserMask = "ISBT";
+//                        break;
+//                    case MWParser.MWP_PARSER_MASK_IUID:
+//                        parserMask = "IUID";
+//                        break;
+//                    case MWParser.MWP_PARSER_MASK_HIBC:
+//                        parserMask = "HIBC";
+//                        break;
+//                    case MWParser.MWP_PARSER_MASK_SCM:
+//                        parserMask = "SCM";
+//                        break;
+//
+//                    default:
+//                        parserMask = "unknown";
+//                        break;
+//                }
+//
+//                barcode = result.text + "\n*Not a valid " + parserMask +
+//                        " formatted barcode";
+//            }
+//
+//        }
+        /* Parser */
+
+
+//        if (result.locationPoints != null && CameraManager.get().
+//
+//                getCurrentResolution()
+//
+//                != null
+//                && OVERLAY_MODE == OverlayMode.OM_MWOVERLAY)
+//
+//        {
+//
+//            MWOverlay.showLocation(result.locationPoints.points, result.imageWidth, result.imageHeight);
+//        }
+
+        if (result.isGS1)
+
+        {
+            typeName += " (GS1)";
+        }
+
+        Log.e("KYLEDECOT", barcode);
+
+
+//        new AlertDialog.Builder(this)
+//                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+//                    @Override
+//                    public void onDismiss(DialogInterface dialog) {
+//                        if (decodeHandler != null) {
+//                            decodeHandler.sendEmptyMessage(ID_RESTART_PREVIEW);
+//                        }
+//                    }
+//                })
+//                .setTitle(typeName)
+//                .setMessage(barcode)
+//                .setNegativeButton("Close", null)
+//                .show();
+
+        /* Analytics */
+        /*
+         * Replace "TestTag" in order to send custom tag.
+         */
+        /*
+         * if (USE_MWANALYTICS) { if
+         * (ContextCompat.checkSelfPermission(ActivityCapture.this,
+         * Manifest.permission.ACCESS_FINE_LOCATION) !=
+         * PackageManager.PERMISSION_GRANTED) { encResult =
+         * result.encryptedResult; tName = typeName;
+         *
+         * if
+         * (ActivityCompat.shouldShowRequestPermissionRationale(ActivityCapture.
+         * this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+         * MWBAnalytics.MWB_sendReport(result.encryptedResult, typeName,
+         * analyticsTag); } else {
+         * ActivityCompat.requestPermissions(ActivityCapture.this, new String[]
+         * { Manifest.permission.ACCESS_FINE_LOCATION }, 12333); } } else { if
+         * (encResult != null) { encResult = null; tName = null; }
+         * MWBAnalytics.MWB_sendReport(result.encryptedResult, typeName,
+         * analyticsTag); } }
+         */
     }
 }
