@@ -1,14 +1,14 @@
-import React from 'react';
-import { StyleSheet, Text, View, UIManager } from 'react-native';
-import DriversLicenseBarcodeScanner from 'react-native-drivers-license-barcode-scanner';
+import React from "react";
+import { StyleSheet } from "react-native";
+import DriversLicenseBarcodeScanner from "react-native-drivers-license-barcode-scanner";
 
 export default class App extends React.Component {
   render() {
     return (
       <DriversLicenseBarcodeScanner
         style={styles.container}
-        ref={(r) => this._ref = r}
-       />
+        ref={r => (this._ref = r)}
+      />
     );
   }
 }
@@ -16,8 +16,8 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 0.5,
-    backgroundColor: '#fd0',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    backgroundColor: "#fd0",
+    alignItems: "center",
+    justifyContent: "center"
+  }
 });
