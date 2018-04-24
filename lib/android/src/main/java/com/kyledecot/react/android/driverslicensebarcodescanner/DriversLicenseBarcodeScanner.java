@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.manateeworks.BarcodeScanner;
 import com.manateeworks.CameraManager;
@@ -24,7 +25,6 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
 
     public static final boolean USE_MWANALYTICS = false;
     public static final boolean PDF_OPTIMIZED = false;
-
 
     private enum State {
         STOPPED, PREVIEW, DECODING
@@ -80,136 +80,160 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     private SurfaceHolder surfaceHolder;
     private boolean surfaceChanged = false;
 
+    private ReactApplicationContext appContext;
 
-    public DriversLicenseBarcodeScanner(ThemedReactContext reactContext) {
+    public DriversLicenseBarcodeScanner(ThemedReactContext reactContext, ReactApplicationContext appContext) {
         super(reactContext);
+
+        this.appContext = appContext;
 
         Log.e("KYLEDECOT", "constructed surface view instance");
     }
 
     private void initCamera() {
-//        final Activity activity = this.appContext.getCurrentActivity();
-//
-//        if (activity == null) {
-//            Log.e("KYLEDECOT", "No Activity Yet!");
-//            return;
-//        }
-//
-//        Log.e("CAMERA", "WE DID IT!");
-//
-//        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-//            Log.e("KYLEDECOT", "NO NO NO PERMISSIONS GRANTED");
-//
-//            /* WHEN TARGETING ANDROID 6 OR ABOVE, PERMISSION IS NEEDED */
-//            if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
-//                    Manifest.permission.CAMERA)) {
-//
-//                new AlertDialog.Builder(activity).setMessage("You need to allow access to the Camera")
-//                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                ActivityCompat.requestPermissions(activity,
-//                                        new String[]{Manifest.permission.CAMERA}, 12322);
-//                            }
-//                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        // onBackPressed();
-//                    }
-//                }).create().show();
-//            } else {
-//                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA},
-//                        12322);
-//            }
-//        } else {
-//            Log.e("KYLEDECOT", "PERMISSIONS GRANTED ALREADY!!!!");
-//
-//            try {
-//                // Select desired camera resoloution. Not all devices
-//                // supports all
-//                // resolutions, closest available will be chosen
-//                // If not selected, closest match to screen resolution will
-//                // be
-//                // chosen
-//                // High resolutions will slow down scanning proccess on
-//                // slower
-//                // devices
-//
-//                if (MAX_THREADS > 2 || PDF_OPTIMIZED) {
-//                    CameraManager.setDesiredPreviewSize(1280, 720);
-//                } else {
-//                    CameraManager.setDesiredPreviewSize(800, 480);
-//                }
-//
-//                CameraManager.get().openDriver(surfaceHolder, true);
-//
-//            } catch (IOException ioe) {
-////                 displayFrameworkBugMessageAndExit(ioe.getMessage());
-//                return;
-//            } catch (RuntimeException e) {
-//                // Barcode Scanner has seen crashes in the wild of this
-//                // variety:
-//                // java.?lang.?RuntimeException: Fail to connect to camera
-//                // service
-////                 displayFrameworkBugMessageAndExit(e.getMessage());
-//                return;
-//            }
-//
-//            Log.i("preview", "start preview.");
-//
-//
-//            CameraManager.get().startPreview();
-////            restartPreviewAndDecode();
+        final Activity activity = this.appContext.getCurrentActivity();
+
+        if (activity == null) {
+            Log.e("KYLEDECOT", "No Activity Yet!");
+            return;
+        }
+
+        Log.e("CAMERA", "WE DID IT!");
+
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            Log.e("KYLEDECOT", "NO NO NO PERMISSIONS GRANTED");
+
+            /* WHEN TARGETING ANDROID 6 OR ABOVE, PERMISSION IS NEEDED */
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
+                    Manifest.permission.CAMERA)) {
+
+                new AlertDialog.Builder(activity).setMessage("You need to allow access to the Camera")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ActivityCompat.requestPermissions(activity,
+                                        new String[]{Manifest.permission.CAMERA}, 12322);
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // onBackPressed();
+                    }
+                }).create().show();
+            } else {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA},
+                        12322);
+            }
+        } else {
+            Log.e("KYLEDECOT", "PERMISSIONS GRANTED ALREADY!!!!");
+
+            try {
+                // Select desired camera resoloution. Not all devices
+                // supports all
+                // resolutions, closest available will be chosen
+                // If not selected, closest match to screen resolution will
+                // be
+                // chosen
+                // High resolutions will slow down scanning proccess on
+                // slower
+                // devices
+
+                if (MAX_THREADS > 2 || PDF_OPTIMIZED) {
+                    CameraManager.setDesiredPreviewSize(1280, 720);
+                } else {
+                    CameraManager.setDesiredPreviewSize(800, 480);
+                }
+
+                CameraManager.get().openDriver(surfaceHolder, true);
+
+            } catch (IOException ioe) {
+//                 displayFrameworkBugMessageAndExit(ioe.getMessage());
+                return;
+            } catch (RuntimeException e) {
+                // Barcode Scanner has seen crashes in the wild of this
+                // variety:
+                // java.?lang.?RuntimeException: Fail to connect to camera
+                // service
+//                 displayFrameworkBugMessageAndExit(e.getMessage());
+                return;
+            }
+
+            Log.i("preview", "start preview.");
+
+
+            CameraManager.get().startPreview();
+            restartPreviewAndDecode();
 ////                 updateFlash();
-//        }
+        }
+    }
+
+    private void restartPreviewAndDecode() {
+        if (state == State.STOPPED) {
+            state = State.PREVIEW;
+            Log.i("preview", "requestPreviewFrame.");
+            CameraManager.get().requestPreviewFrame(getHandler(), ID_DECODE);
+            CameraManager.get().requestAutoFocus(getHandler(), ID_AUTO_FOCUS);
+        }
     }
 
   public void onResume() {
-    getHolder().addCallback(this);
+//    getHolder().addCallback(this);
 
+
+      if (hasSurface) {
+          Log.i("Init Camera", "On resume");
+          initCamera();
+      } else if (surfaceHolder != null) {
+          // Install the callback and wait for surfaceCreated() to init the
+          // camera.
+          surfaceHolder.addCallback(this);
+      }
 
       //
-//      int registerResult = BarcodeScanner.MWBregisterSDK("umDQbMBzRwwXVuRPBtLbzcYfPd0SVfpSoq3wVebSGtw=", this.appContext.getCurrentActivity());
-//
-//      switch (registerResult) {
-//          case BarcodeScanner.MWB_RTREG_OK:
-//              Log.i("MWBregisterSDK", "Registration OK");
-//              break;
-//          case BarcodeScanner.MWB_RTREG_INVALID_KEY:
-//              Log.e("MWBregisterSDK", "Registration Invalid Key");
-//              break;
-//          case BarcodeScanner.MWB_RTREG_INVALID_CHECKSUM:
-//              Log.e("MWBregisterSDK", "Registration Invalid Checksum");
-//              break;
-//          case BarcodeScanner.MWB_RTREG_INVALID_APPLICATION:
-//              Log.e("MWBregisterSDK", "Registration Invalid Application");
-//              break;
-//          case BarcodeScanner.MWB_RTREG_INVALID_SDK_VERSION:
-//              Log.e("MWBregisterSDK", "Registration Invalid SDK Version");
-//              break;
-//          case BarcodeScanner.MWB_RTREG_INVALID_KEY_VERSION:
-//              Log.e("MWBregisterSDK", "Registration Invalid Key Version");
-//              break;
-//          case BarcodeScanner.MWB_RTREG_INVALID_PLATFORM:
-//              Log.e("MWBregisterSDK", "Registration Invalid Platform");
-//              break;
-//          case BarcodeScanner.MWB_RTREG_KEY_EXPIRED:
-//              Log.e("MWBregisterSDK", "Registration Key Expired");
-//              break;
-//          default:
-//              Log.e("MWBregisterSDK", "Registration Unknown Error");
-//              break;
-//      }
-//
-//      BarcodeScanner.MWBsetDirection(BarcodeScanner.MWB_SCANDIRECTION_HORIZONTAL);
-//      BarcodeScanner.MWBsetActiveCodes(BarcodeScanner.MWB_CODE_MASK_PDF);
-//      BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_PDF, RECT_LANDSCAPE_1D);
-//      BarcodeScanner.MWBsetLevel(2);
-//      BarcodeScanner.MWBsetResultType(USE_RESULT_TYPE);
+      int registerResult = BarcodeScanner.MWBregisterSDK("umDQbMBzRwwXVuRPBtLbzcYfPd0SVfpSoq3wVebSGtw=", this.appContext.getCurrentActivity());
 
-//      Activity activity = context.getCurrentActivity();
-//
-//      CameraManager.init(activity);
+      switch (registerResult) {
+          case BarcodeScanner.MWB_RTREG_OK:
+              Log.i("MWBregisterSDK", "Registration OK");
+              break;
+          case BarcodeScanner.MWB_RTREG_INVALID_KEY:
+              Log.e("MWBregisterSDK", "Registration Invalid Key");
+              break;
+          case BarcodeScanner.MWB_RTREG_INVALID_CHECKSUM:
+              Log.e("MWBregisterSDK", "Registration Invalid Checksum");
+              break;
+          case BarcodeScanner.MWB_RTREG_INVALID_APPLICATION:
+              Log.e("MWBregisterSDK", "Registration Invalid Application");
+              break;
+          case BarcodeScanner.MWB_RTREG_INVALID_SDK_VERSION:
+              Log.e("MWBregisterSDK", "Registration Invalid SDK Version");
+              break;
+          case BarcodeScanner.MWB_RTREG_INVALID_KEY_VERSION:
+              Log.e("MWBregisterSDK", "Registration Invalid Key Version");
+              break;
+          case BarcodeScanner.MWB_RTREG_INVALID_PLATFORM:
+              Log.e("MWBregisterSDK", "Registration Invalid Platform");
+              break;
+          case BarcodeScanner.MWB_RTREG_KEY_EXPIRED:
+              Log.e("MWBregisterSDK", "Registration Key Expired");
+              break;
+          default:
+              Log.e("MWBregisterSDK", "Registration Unknown Error");
+              break;
+      }
+
+      BarcodeScanner.MWBsetDirection(BarcodeScanner.MWB_SCANDIRECTION_HORIZONTAL);
+      BarcodeScanner.MWBsetActiveCodes(BarcodeScanner.MWB_CODE_MASK_PDF);
+      BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_PDF, RECT_LANDSCAPE_1D);
+      BarcodeScanner.MWBsetLevel(2);
+      BarcodeScanner.MWBsetResultType(USE_RESULT_TYPE);
+
+      Activity activity = appContext.getCurrentActivity();
+
+      CameraManager.init(activity);
+
+      hasSurface = false;
+      state = State.STOPPED;
   }
 
   public void onPause() {
@@ -222,16 +246,19 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Log.e("KYLEDECOT", "surfaceCreated");
+        if (!hasSurface) {
+            hasSurface = true;
+        }
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        Log.e("KYLEDECOT", "surfaceChanged");
+        initCamera();
+        surfaceChanged = true;
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        Log.e("KYLEDECOT", "surfaceDestroyed");
+        hasSurface = false;
     }
 }
