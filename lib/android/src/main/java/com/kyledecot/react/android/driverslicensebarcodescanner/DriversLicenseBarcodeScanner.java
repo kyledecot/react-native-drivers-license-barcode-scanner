@@ -16,6 +16,9 @@ import android.view.SurfaceView;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
+
 import com.manateeworks.BarcodeScanner;
 import com.manateeworks.CameraManager;
 import com.manateeworks.MWParser;
@@ -24,32 +27,13 @@ import com.manateeworks.BarcodeScanner.MWResult;
 import java.io.IOException;
 
 public class DriversLicenseBarcodeScanner extends SurfaceView implements SurfaceHolder.Callback {
-
-    public static final boolean USE_MWANALYTICS = false;
-    public static final boolean PDF_OPTIMIZED = false;
-
     private enum State {
         STOPPED, PREVIEW, DECODING
     }
 
-    private enum OverlayMode {
-        OM_IMAGE, OM_MWOVERLAY, OM_NONE
-    }
-
     State state = State.STOPPED;
 
-    /* Parser */
-    /*
-     * MWPARSER_MASK - Set the desired parser type Available options:
-     * MWParser.MWP_PARSER_MASK_ISBT MWParser.MWP_PARSER_MASK_AAMVA
-     * MWParser.MWP_PARSER_MASK_IUID MWParser.MWP_PARSER_MASK_HIBC
-     * MWParser.MWP_PARSER_MASK_SCM MWParser.MWP_PARSER_MASK_NONE
-     */
-    public static final int MWPARSER_MASK = MWParser.MWP_PARSER_MASK_NONE;
-
     public static final int USE_RESULT_TYPE = BarcodeScanner.MWB_RESULT_TYPE_MW;
-
-    public static final DriversLicenseBarcodeScanner.OverlayMode OVERLAY_MODE = DriversLicenseBarcodeScanner.OverlayMode.OM_MWOVERLAY;
 
     // !!! Rects are in format: x, y, width, height !!!
     public static final Rect RECT_LANDSCAPE_1D = new Rect(3, 20, 94, 60);
@@ -59,8 +43,6 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     public static final Rect RECT_FULL_1D = new Rect(3, 3, 94, 94);
     public static final Rect RECT_FULL_2D = new Rect(20, 5, 60, 90);
     public static final Rect RECT_DOTCODE = new Rect(30, 20, 40, 60);
-
-    private static final String MSG_CAMERA_FRAMEWORK_BUG = "Sorry, the Android camera encountered a problem: ";
 
     public static final int ID_AUTO_FOCUS = 0x01;
     public static final int ID_DECODE = 0x02;
@@ -78,11 +60,15 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     private boolean surfaceChanged = false;
 
     private ReactApplicationContext appContext;
+    private ThemedReactContext context;
+    private DriversLicenseBarcodeScannerManager manager;
 
-    public DriversLicenseBarcodeScanner(ThemedReactContext reactContext, ReactApplicationContext appContext) {
+    public DriversLicenseBarcodeScanner(ThemedReactContext reactContext, ReactApplicationContext appContext, DriversLicenseBarcodeScannerManager manager) {
         super(reactContext);
 
+        this.context = reactContext;
         this.appContext = appContext;
+        this.manager = manager;
     }
 
     private void initCamera() {
@@ -172,7 +158,7 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
       } else if (getHolder() != null) {
           getHolder().addCallback(this);
       }
-      
+
       int registerResult = BarcodeScanner.MWBregisterSDK("umDQbMBzRwwXVuRPBtLbzcYfPd0SVfpSoq3wVebSGtw=", this.appContext.getCurrentActivity());
 
       switch (registerResult) {
@@ -324,8 +310,10 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     }
 
     public void handleDecode(MWResult result) {
-        String barcode = result.text;
+        WritableMap event = Arguments.createMap();
 
-        Log.e("KYLEDECOT", barcode);
+        event.putString("value", result.text);
+
+        manager.pushEvent(context, this, "onSuccess",  event);
     }
 }
