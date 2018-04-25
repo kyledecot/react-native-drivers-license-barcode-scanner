@@ -8,5 +8,9 @@ build/
 Pods/
 Example.xcworkspace/
 yarn-error.log
-.gradle/
-.idea/
+.idea
+*.iml
+.gradle
+local.properties
+lib/android/src/main/gen
+example/android/app/src/main/gen
