@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Platform } from 'react-native';
+import { StyleSheet, Text, View, Platform, Alert } from 'react-native';
 import DriversLicenseBarcodeScanner from 'react-native-drivers-license-barcode-scanner';
 
 // @see https://manateeworks.com/barcode-scanner-sdk
@@ -30,6 +30,10 @@ export default class App extends React.Component {
     });
   }
 
+  _handleError = (error) => {
+    Alert.alert('Error', error);
+  }
+
   _renderValue() {
     if (!this.state.value) {
       return null;
@@ -45,6 +49,7 @@ export default class App extends React.Component {
           style={{ flex: 1 }}
           license={this._license()}
           onSuccess={value => this._showValue(value)}
+          onError={this._handleError}
         />
         {this._renderValue()}
 

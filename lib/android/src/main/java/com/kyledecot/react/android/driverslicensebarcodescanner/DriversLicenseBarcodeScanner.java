@@ -151,44 +151,50 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
         }
     }
 
+    public void setLicense(String license) {
+        Activity activity = this.appContext.getCurrentActivity();
+
+        Log.e("FOOBAR", "SET THE LICENSE PARSER");
+
+        int registerResult = BarcodeScanner.MWBregisterSDK(license, activity);
+
+        switch (registerResult) {
+            case BarcodeScanner.MWB_RTREG_OK:
+                Log.i("MWBregisterSDK", "Registration OK");
+                break;
+            case BarcodeScanner.MWB_RTREG_INVALID_KEY:
+                onError("Registration Invalid Key");
+                break;
+            case BarcodeScanner.MWB_RTREG_INVALID_CHECKSUM:
+                onError("Registration Invalid Checksum");
+                break;
+            case BarcodeScanner.MWB_RTREG_INVALID_APPLICATION:
+                onError("Registration Invalid Application");
+                break;
+            case BarcodeScanner.MWB_RTREG_INVALID_SDK_VERSION:
+                onError("Registration Invalid SDK Version");
+                break;
+            case BarcodeScanner.MWB_RTREG_INVALID_KEY_VERSION:
+                onError("Registration Invalid Key Version");
+                break;
+            case BarcodeScanner.MWB_RTREG_INVALID_PLATFORM:
+                onError("Registration Invalid Platform");
+                break;
+            case BarcodeScanner.MWB_RTREG_KEY_EXPIRED:
+                onError("Registration Key Expired");
+                break;
+            default:
+                onError("Registration Unknown Error");
+                break;
+        }
+    }
+
   public void onResume() {
       if (hasSurface) {
           Log.i("Init Camera", "On resume");
           initCamera();
       } else if (getHolder() != null) {
           getHolder().addCallback(this);
-      }
-
-      int registerResult = BarcodeScanner.MWBregisterSDK("umDQbMBzRwwXVuRPBtLbzcYfPd0SVfpSoq3wVebSGtw=", this.appContext.getCurrentActivity());
-
-      switch (registerResult) {
-          case BarcodeScanner.MWB_RTREG_OK:
-              Log.i("MWBregisterSDK", "Registration OK");
-              break;
-          case BarcodeScanner.MWB_RTREG_INVALID_KEY:
-              onError("Registration Invalid Key");
-              break;
-          case BarcodeScanner.MWB_RTREG_INVALID_CHECKSUM:
-              onError("Registration Invalid Checksum");
-              break;
-          case BarcodeScanner.MWB_RTREG_INVALID_APPLICATION:
-              onError("Registration Invalid Application");
-              break;
-          case BarcodeScanner.MWB_RTREG_INVALID_SDK_VERSION:
-              onError("Registration Invalid SDK Version");
-              break;
-          case BarcodeScanner.MWB_RTREG_INVALID_KEY_VERSION:
-              onError("Registration Invalid Key Version");
-              break;
-          case BarcodeScanner.MWB_RTREG_INVALID_PLATFORM:
-              onError("Registration Invalid Platform");
-              break;
-          case BarcodeScanner.MWB_RTREG_KEY_EXPIRED:
-              onError("Registration Key Expired");
-              break;
-          default:
-              onError("Registration Unknown Error");
-              break;
       }
 
       BarcodeScanner.MWBsetDirection(BarcodeScanner.MWB_SCANDIRECTION_HORIZONTAL);

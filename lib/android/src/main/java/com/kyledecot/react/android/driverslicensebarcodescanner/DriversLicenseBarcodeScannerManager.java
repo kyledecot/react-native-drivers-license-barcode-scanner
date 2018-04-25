@@ -7,6 +7,8 @@ import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.annotations.ReactProp;
 
 import android.view.View;
 
@@ -53,6 +55,11 @@ public class DriversLicenseBarcodeScannerManager extends SimpleViewManager<Drive
     void pushEvent(ThemedReactContext context, View view, String name, WritableMap data) {
         context.getJSModule(RCTEventEmitter.class)
                 .receiveEvent(view.getId(), name, data);
+    }
+
+    @ReactProp(name = "license")
+    public void setRegion(DriversLicenseBarcodeScanner view, String license) {
+        view.setLicense(license);
     }
 
     @Override
