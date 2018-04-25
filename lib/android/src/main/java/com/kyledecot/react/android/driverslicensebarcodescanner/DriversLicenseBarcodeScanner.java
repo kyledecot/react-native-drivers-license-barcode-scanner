@@ -57,8 +57,6 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     private int activeThreads = 0;
     public static int MAX_THREADS = Runtime.getRuntime().availableProcessors();
 
-    private boolean surfaceChanged = false;
-
     private ReactApplicationContext appContext;
     private ThemedReactContext context;
     private DriversLicenseBarcodeScannerManager manager;
@@ -153,24 +151,18 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     public void setFlash(boolean flash) {
         CameraManager cameraManager = CameraManager.get();
 
-        if (cameraManager == null) {
+        if (cameraManager == null || !cameraManager.isTorchAvailable()) {
             return;
         }
-
-            if (!cameraManager.isTorchAvailable()) {
-                return;
-
-            }
 
         cameraManager.setTorch(flash);
     }
 
     public void setLicense(String license) {
         Activity activity = this.appContext.getCurrentActivity();
+        int result = BarcodeScanner.MWBregisterSDK(license, activity);
 
-        int registerResult = BarcodeScanner.MWBregisterSDK(license, activity);
-
-        switch (registerResult) {
+        switch (result) {
             case BarcodeScanner.MWB_RTREG_OK:
                 initCamera();
                 break;
@@ -202,6 +194,8 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     }
 
   public void onResume() {
+      Activity activity = appContext.getCurrentActivity();
+
       if (hasSurface) {
           Log.i("Init Camera", "On resume");
           initCamera();
@@ -215,7 +209,6 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
       BarcodeScanner.MWBsetLevel(2);
       BarcodeScanner.MWBsetResultType(USE_RESULT_TYPE);
 
-      Activity activity = appContext.getCurrentActivity();
 
       CameraManager.init(activity);
 
@@ -304,7 +297,6 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         initCamera();
-        surfaceChanged = true;
     }
 
     @Override
