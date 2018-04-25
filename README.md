@@ -1,1 +1,1 @@
-# react-native-drivers-license-barcode-scanner ![Travis CI](https://travis-ci.org/kyledecot/drivers-license-barcode-generator.svg?branch=master)
+# react-native-drivers-license-barcode-scanner [![Build Status](https://travis-ci.org/kyledecot/react-native-drivers-license-barcode-scanner.svg?branch=master)](https://travis-ci.org/kyledecot/react-native-drivers-license-barcode-scanner)
