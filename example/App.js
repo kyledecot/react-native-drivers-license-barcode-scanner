@@ -43,7 +43,19 @@ export default class App extends React.Component {
       return null;
     }
 
-    return (<Text style={styles.value}>{this.state.value}</Text>);
+    return (
+      <TouchableOpacity
+        onPress={this._handlePress}
+      >
+        <Text style={styles.value}>{this.state.value}</Text>
+      </TouchableOpacity>
+    );
+  }
+
+  _handlePress = () => {
+    this.setState({
+      value: null,
+    });
   }
 
   _handleToggleFlash = () => {
