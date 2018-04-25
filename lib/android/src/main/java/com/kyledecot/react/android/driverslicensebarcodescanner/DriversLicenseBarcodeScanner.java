@@ -21,8 +21,8 @@ import com.facebook.react.bridge.WritableMap;
 
 import com.manateeworks.BarcodeScanner;
 import com.manateeworks.CameraManager;
-import com.manateeworks.MWParser;
 import com.manateeworks.BarcodeScanner.MWResult;
+import com.manateeworks.MWOverlay;
 
 import java.io.IOException;
 
@@ -52,7 +52,12 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
 
     private Handler decodeHandler;
     private boolean hasSurface;
-    private String package_name;
+
+    public static final OverlayMode OVERLAY_MODE = OverlayMode.OM_MWOVERLAY;
+
+    private enum OverlayMode {
+        OM_IMAGE, OM_MWOVERLAY, OM_NONE
+    }
 
     private int activeThreads = 0;
     public static int MAX_THREADS = Runtime.getRuntime().availableProcessors();
@@ -67,6 +72,36 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
         this.context = reactContext;
         this.appContext = appContext;
         this.manager = manager;
+
+        BarcodeScanner.MWBsetDirection(BarcodeScanner.MWB_SCANDIRECTION_HORIZONTAL);
+        BarcodeScanner.MWBsetActiveCodes(BarcodeScanner.MWB_CODE_MASK_PDF);
+        BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_PDF, RECT_LANDSCAPE_1D);
+        BarcodeScanner.MWBsetLevel(2);
+        BarcodeScanner.MWBsetResultType(USE_RESULT_TYPE);
+
+        decodeHandler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                switch (msg.what) {
+                    case ID_DECODE:
+                        decode((byte[]) msg.obj, msg.arg1, msg.arg2);
+                        break;
+                    case ID_AUTO_FOCUS:
+                        autoFocus();
+                        break;
+                    case ID_RESTART_PREVIEW:
+                        restartPreviewAndDecode();
+                        break;
+                    case ID_DECODE_SUCCEED:
+                        stop();
+                        onSuccess(((MWResult) msg.obj).text);
+                        break;
+                    case ID_DECODE_FAILED:
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     private void initCamera() {
@@ -96,21 +131,8 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
             }
         } else {
             try {
-                // Select desired camera resoloution. Not all devices
-                // supports all
-                // resolutions, closest available will be chosen
-                // If not selected, closest match to screen resolution will
-                // be
-                // chosen
-                // High resolutions will slow down scanning proccess on
-                // slower
-                // devices
+                setDesiredPreviewSize();
 
-                if (MAX_THREADS > 2) {
-                    CameraManager.setDesiredPreviewSize(1280, 720);
-                } else {
-                    CameraManager.setDesiredPreviewSize(800, 480);
-                }
 
                 CameraManager.get().openDriver(getHolder(), true);
 
@@ -126,8 +148,27 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
                 return;
             }
 
+            CameraManager.init(activity);
             CameraManager.get().startPreview();
             restartPreviewAndDecode();
+        }
+    }
+
+    public void setDesiredPreviewSize() {
+        // Select desired camera resoloution. Not all devices
+        // supports all
+        // resolutions, closest available will be chosen
+        // If not selected, closest match to screen resolution will
+        // be
+        // chosen
+        // High resolutions will slow down scanning proccess on
+        // slower
+        // devices
+
+        if (MAX_THREADS > 2) {
+            CameraManager.setDesiredPreviewSize(1280, 720);
+        } else {
+            CameraManager.setDesiredPreviewSize(800, 480);
         }
     }
 
@@ -142,10 +183,13 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     private void restartPreviewAndDecode() {
         if (isStopped()) {
             preview();
-
-            CameraManager.get().requestPreviewFrame(getDecodeHandler(), ID_DECODE);
-            autoFocus(getDecodeHandler());
+            requestPreviewFrame();
+            autoFocus();
         }
+    }
+
+    public void requestPreviewFrame() {
+        CameraManager.get().requestPreviewFrame(getDecodeHandler(), ID_DECODE);
     }
 
     public void setFlash(boolean flash) {
@@ -193,52 +237,16 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
         }
     }
 
-  public void onResume() {
-      Activity activity = appContext.getCurrentActivity();
+    private void stop() {
+        state = State.STOPPED;
+    }
 
+  public void onResume() {
       if (hasSurface) {
-          Log.i("Init Camera", "On resume");
-          initCamera();
-      } else if (getHolder() != null) {
+         initCamera();
+      } else {
           getHolder().addCallback(this);
       }
-
-      BarcodeScanner.MWBsetDirection(BarcodeScanner.MWB_SCANDIRECTION_HORIZONTAL);
-      BarcodeScanner.MWBsetActiveCodes(BarcodeScanner.MWB_CODE_MASK_PDF);
-      BarcodeScanner.MWBsetScanningRect(BarcodeScanner.MWB_CODE_MASK_PDF, RECT_LANDSCAPE_1D);
-      BarcodeScanner.MWBsetLevel(2);
-      BarcodeScanner.MWBsetResultType(USE_RESULT_TYPE);
-
-
-      CameraManager.init(activity);
-
-      hasSurface = false;
-      state = State.STOPPED;
-      decodeHandler = new Handler(new Handler.Callback() {
-
-          @Override
-          public boolean handleMessage(Message msg) {
-              switch (msg.what) {
-                  case ID_DECODE:
-                      decode((byte[]) msg.obj, msg.arg1, msg.arg2);
-                      break;
-
-                  case ID_AUTO_FOCUS:
-                      autoFocus(decodeHandler);
-                      break;
-                  case ID_RESTART_PREVIEW:
-                      restartPreviewAndDecode();
-                      break;
-                  case ID_DECODE_SUCCEED:
-                      state = State.STOPPED;
-                      onSuccess(((MWResult) msg.obj).text);
-                      break;
-                  case ID_DECODE_FAILED:
-                      break;
-              }
-              return false;
-          }
-      });
   }
 
   private boolean isDecoding() {
@@ -249,18 +257,17 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
         return state == State.PREVIEW;
   }
 
-
-    private boolean isStopped() {
-        return state == State.STOPPED;
-    }
+  private boolean isStopped() {
+    return state == State.STOPPED;
+  }
 
   // TODO: Should we be passing the decode handler here for the surface handler?
-  public void autoFocus(Handler decodeHandler) {
+  public void autoFocus() {
       if (!isPreviewing() || !isDecoding()) {
           return;
       }
 
-      CameraManager.get().requestAutoFocus(decodeHandler, ID_AUTO_FOCUS);
+      CameraManager.get().requestAutoFocus(getHandler(), ID_AUTO_FOCUS);
   }
 
   public void onSuccess(String value) {
@@ -281,7 +288,23 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
 
   public void onPause() {
       Log.e("KYLEDECOT", "onPause");
+
+      stopScaner();
+
   }
+
+    private void stopScaner() {
+        /* Stops the scanner when the activity goes in background */
+        if (OVERLAY_MODE == OverlayMode.OM_MWOVERLAY) {
+            MWOverlay.removeOverlay();
+        }
+
+        CameraManager.get().stopPreview();
+        CameraManager.get().closeDriver();
+
+        stop();
+        setFlash(false);
+    }
 
   public void onDestroy() {
       Log.e("KYLEDECOT", "onDestroy");
@@ -291,6 +314,7 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     public void surfaceCreated(SurfaceHolder holder) {
         if (!hasSurface) {
             hasSurface = true;
+            CameraManager.init(appContext.getCurrentActivity());
         }
     }
 
@@ -321,7 +345,7 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
                 MWResult mwResult = result(data, width, height);
 
                 if (mwResult != null) {
-                    state = State.STOPPED;
+                    stop();
                     Message message = Message.obtain(getDecodeHandler(), ID_DECODE_SUCCEED, mwResult);
                     message.arg1 = mwResult.type;
                     message.sendToTarget();
