@@ -74,11 +74,6 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     private void initCamera() {
         final Activity activity = this.appContext.getCurrentActivity();
 
-        if (activity == null) {
-            Log.e("KYLEDECOT", "No Activity Yet!");
-            return;
-        }
-
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             /* WHEN TARGETING ANDROID 6 OR ABOVE, PERMISSION IS NEEDED */
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
@@ -142,25 +137,27 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
         return decodeHandler;
     }
 
-    private void restartPreviewAndDecode() {
-        if (state == State.STOPPED) {
-            state = State.PREVIEW;
+    public void preview() {
+        state = State.PREVIEW;
+    }
 
+    private void restartPreviewAndDecode() {
+        if (isStopped()) {
+            preview();
+            
             CameraManager.get().requestPreviewFrame(getDecodeHandler(), ID_DECODE);
-//             CameraManager.get().requestAutoFocus(getDecodeHandler(), ID_AUTO_FOCUS);
+            autoFocus(getDecodeHandler());
         }
     }
 
     public void setLicense(String license) {
         Activity activity = this.appContext.getCurrentActivity();
 
-        Log.e("FOOBAR", "SET THE LICENSE PARSER");
-
         int registerResult = BarcodeScanner.MWBregisterSDK(license, activity);
 
         switch (registerResult) {
             case BarcodeScanner.MWB_RTREG_OK:
-                Log.i("MWBregisterSDK", "Registration OK");
+                initCamera();
                 break;
             case BarcodeScanner.MWB_RTREG_INVALID_KEY:
                 onError("Registration Invalid Key");
