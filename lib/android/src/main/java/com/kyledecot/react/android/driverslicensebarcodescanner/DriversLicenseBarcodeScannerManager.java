@@ -43,7 +43,8 @@ public class DriversLicenseBarcodeScannerManager extends SimpleViewManager<Drive
     @Nullable
     public Map getExportedCustomDirectEventTypeConstants() {
         Map<String, Map<String, String>> map = MapBuilder.of(
-                "onSuccess", MapBuilder.of("registrationName", "onSuccess")
+            "onSuccess", MapBuilder.of("registrationName", "onSuccess"),
+            "onError", MapBuilder.of("registrationName", "onError")
         );
 
         return map;

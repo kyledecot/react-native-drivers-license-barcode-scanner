@@ -166,28 +166,28 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
               Log.i("MWBregisterSDK", "Registration OK");
               break;
           case BarcodeScanner.MWB_RTREG_INVALID_KEY:
-              Log.e("MWBregisterSDK", "Registration Invalid Key");
+              onError("Registration Invalid Key");
               break;
           case BarcodeScanner.MWB_RTREG_INVALID_CHECKSUM:
-              Log.e("MWBregisterSDK", "Registration Invalid Checksum");
+              onError("Registration Invalid Checksum");
               break;
           case BarcodeScanner.MWB_RTREG_INVALID_APPLICATION:
-              Log.e("MWBregisterSDK", "Registration Invalid Application");
+              onError("Registration Invalid Application");
               break;
           case BarcodeScanner.MWB_RTREG_INVALID_SDK_VERSION:
-              Log.e("MWBregisterSDK", "Registration Invalid SDK Version");
+              onError("Registration Invalid SDK Version");
               break;
           case BarcodeScanner.MWB_RTREG_INVALID_KEY_VERSION:
-              Log.e("MWBregisterSDK", "Registration Invalid Key Version");
+              onError("Registration Invalid Key Version");
               break;
           case BarcodeScanner.MWB_RTREG_INVALID_PLATFORM:
-              Log.e("MWBregisterSDK", "Registration Invalid Platform");
+              onError("Registration Invalid Platform");
               break;
           case BarcodeScanner.MWB_RTREG_KEY_EXPIRED:
-              Log.e("MWBregisterSDK", "Registration Key Expired");
+              onError("Registration Key Expired");
               break;
           default:
-              Log.e("MWBregisterSDK", "Registration Unknown Error");
+              onError("Registration Unknown Error");
               break;
       }
 
@@ -213,16 +213,14 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
                       break;
 
                   case ID_AUTO_FOCUS:
-                      if (state == State.PREVIEW || state == State.DECODING) {
-                          CameraManager.get().requestAutoFocus(decodeHandler, ID_AUTO_FOCUS);
-                      }
+                      autoFocus(decodeHandler);
                       break;
                   case ID_RESTART_PREVIEW:
                       restartPreviewAndDecode();
                       break;
                   case ID_DECODE_SUCCEED:
                       state = State.STOPPED;
-                      handleDecode((MWResult) msg.obj);
+                      onSuccess(((MWResult) msg.obj).text);
                       break;
                   case ID_DECODE_FAILED:
                       break;
@@ -230,6 +228,29 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
               return false;
           }
       });
+  }
+
+  // TODO: Should we be passing the decode handler here for the surface handler?
+  public void autoFocus(Handler decodeHandler) {
+      if (state == State.PREVIEW || state == State.DECODING) {
+          CameraManager.get().requestAutoFocus(decodeHandler, ID_AUTO_FOCUS);
+      }
+  }
+
+  public void onSuccess(String value) {
+        WritableMap event = Arguments.createMap();
+
+        event.putString("value", value);
+
+        manager.pushEvent(context, this, "onSuccess",  event);
+    }
+
+  public void onError(String value) {
+    WritableMap event = Arguments.createMap();
+
+    event.putString("value", value);
+
+    manager.pushEvent(context, this, "onError",  event);
   }
 
   public void onPause() {
@@ -267,13 +288,12 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
             public void run() {
                 activeThreads++;
 
-                byte[] rawResult = BarcodeScanner.MWBscanGrayscaleImage(data, width, height);
-
                 if (state == State.STOPPED) {
                     activeThreads--;
                     return;
                 }
 
+                byte[] rawResult = BarcodeScanner.MWBscanGrayscaleImage(data, width, height);
                 MWResult mwResult = null;
 
                 if (rawResult != null && BarcodeScanner.MWBgetResultType() == BarcodeScanner.MWB_RESULT_TYPE_MW) {
@@ -282,16 +302,13 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
 
                     if (results.count > 0) {
                         mwResult = results.getResult(0);
-                        rawResult = mwResult.bytes;
                     }
 
                 } else if (rawResult != null
                         && BarcodeScanner.MWBgetResultType() == BarcodeScanner.MWB_RESULT_TYPE_RAW) {
                     mwResult = new MWResult();
-                    mwResult.bytes = rawResult;
                     mwResult.text = rawResult.toString();
                     mwResult.type = BarcodeScanner.MWBgetLastType();
-                    mwResult.bytesLength = rawResult.length;
                 }
 
                 if (mwResult != null) {
@@ -307,13 +324,5 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
                 activeThreads--;
             }
         }).start();
-    }
-
-    public void handleDecode(MWResult result) {
-        WritableMap event = Arguments.createMap();
-
-        event.putString("value", result.text);
-
-        manager.pushEvent(context, this, "onSuccess",  event);
     }
 }

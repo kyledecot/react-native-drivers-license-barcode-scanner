@@ -1,6 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Platform } from 'react-native';
 import DriversLicenseBarcodeScanner from 'react-native-drivers-license-barcode-scanner';
+
+// @see https://manateeworks.com/barcode-scanner-sdk
+
+const IOS_LICENSE = 'NEUk2MDE1uCn4q+GyGFy8VGeeLeIcUT5dt6REiaI5lM=';
+const ANDROID_LICENSE = 'umDQbMBzRwwXVuRPBtLbzcYfPd0SVfpSoq3wVebSGtw=';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -9,6 +14,14 @@ export default class App extends React.Component {
     this.state = {
       value: null,
     };
+  }
+
+  _license = () => {
+    if (Platform.OS === 'ios') {
+      return IOS_LICENSE;
+    }
+
+    return ANDROID_LICENSE;
   }
 
   _showValue(value) {
@@ -27,9 +40,10 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={styles.container}>
         <DriversLicenseBarcodeScanner
-          style={styles.container}
+          style={{ flex: 1 }}
+          license={this._license()}
           onSuccess={value => this._showValue(value)}
         />
         {this._renderValue()}
