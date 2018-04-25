@@ -105,18 +105,16 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     }
 
     private void initCamera() {
-        final Activity activity = this.appContext.getCurrentActivity();
-
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(getCurrentActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             /* WHEN TARGETING ANDROID 6 OR ABOVE, PERMISSION IS NEEDED */
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getCurrentActivity(),
                     Manifest.permission.CAMERA)) {
 
-                new AlertDialog.Builder(activity).setMessage("You need to allow access to the Camera")
+                new AlertDialog.Builder(getCurrentActivity()).setMessage("You need to allow access to the Camera")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                ActivityCompat.requestPermissions(activity,
+                                ActivityCompat.requestPermissions(getCurrentActivity(),
                                         new String[]{Manifest.permission.CAMERA}, 12322);
                             }
                         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -126,45 +124,27 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
                     }
                 }).create().show();
             } else {
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA},
+                ActivityCompat.requestPermissions(getCurrentActivity(), new String[]{Manifest.permission.CAMERA},
                         12322);
             }
         } else {
             try {
                 setDesiredPreviewSize();
-
-
                 CameraManager.get().openDriver(getHolder(), true);
 
             } catch (IOException ioe) {
-//                 displayFrameworkBugMessageAndExit(ioe.getMessage());
                 return;
             } catch (RuntimeException e) {
-                // Barcode Scanner has seen crashes in the wild of this
-                // variety:
-                // java.?lang.?RuntimeException: Fail to connect to camera
-                // service
-//                 displayFrameworkBugMessageAndExit(e.getMessage());
                 return;
             }
 
-            CameraManager.init(activity);
+            CameraManager.init(getCurrentActivity());
             CameraManager.get().startPreview();
             restartPreviewAndDecode();
         }
     }
 
     public void setDesiredPreviewSize() {
-        // Select desired camera resoloution. Not all devices
-        // supports all
-        // resolutions, closest available will be chosen
-        // If not selected, closest match to screen resolution will
-        // be
-        // chosen
-        // High resolutions will slow down scanning proccess on
-        // slower
-        // devices
-
         if (MAX_THREADS > 2) {
             CameraManager.setDesiredPreviewSize(1280, 720);
         } else {
@@ -203,10 +183,7 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     }
 
     public void setLicense(String license) {
-        Activity activity = this.appContext.getCurrentActivity();
-        int result = BarcodeScanner.MWBregisterSDK(license, activity);
-
-        switch (result) {
+        switch (BarcodeScanner.MWBregisterSDK(license, getCurrentActivity())) {
             case BarcodeScanner.MWB_RTREG_OK:
                 initCamera();
                 break;
@@ -261,7 +238,6 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     return state == State.STOPPED;
   }
 
-  // TODO: Should we be passing the decode handler here for the surface handler?
   public void autoFocus() {
       if (!isPreviewing() || !isDecoding()) {
           return;
@@ -287,10 +263,7 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
   }
 
   public void onPause() {
-      Log.e("KYLEDECOT", "onPause");
-
-      stopScaner();
-
+    stopScaner();
   }
 
     private void stopScaner() {
@@ -314,8 +287,12 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     public void surfaceCreated(SurfaceHolder holder) {
         if (!hasSurface) {
             hasSurface = true;
-            CameraManager.init(appContext.getCurrentActivity());
+            CameraManager.init(getCurrentActivity());
         }
+    }
+
+    public Activity getCurrentActivity() {
+        return appContext.getCurrentActivity();
     }
 
     @Override
