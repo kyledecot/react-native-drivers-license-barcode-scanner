@@ -230,11 +230,26 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
       });
   }
 
+  private boolean isDecoding() {
+        return state == State.DECODING;
+  }
+
+  private boolean isPreviewing() {
+        return state == State.PREVIEW;
+  }
+
+
+    private boolean isStopped() {
+        return state == State.STOPPED;
+    }
+
   // TODO: Should we be passing the decode handler here for the surface handler?
   public void autoFocus(Handler decodeHandler) {
-      if (state == State.PREVIEW || state == State.DECODING) {
-          CameraManager.get().requestAutoFocus(decodeHandler, ID_AUTO_FOCUS);
+      if (!isPreviewing() || !isDecoding()) {
+          return;
       }
+
+      CameraManager.get().requestAutoFocus(decodeHandler, ID_AUTO_FOCUS);
   }
 
   public void onSuccess(String value) {
@@ -280,7 +295,7 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     }
 
     private void decode(final byte[] data, final int width, final int height) {
-        if (activeThreads >= MAX_THREADS || state == State.STOPPED) {
+        if (activeThreads >= MAX_THREADS ||isStopped()) {
             return;
         }
 
@@ -288,28 +303,12 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
             public void run() {
                 activeThreads++;
 
-                if (state == State.STOPPED) {
+                if (isStopped()) {
                     activeThreads--;
                     return;
                 }
 
-                byte[] rawResult = BarcodeScanner.MWBscanGrayscaleImage(data, width, height);
-                MWResult mwResult = null;
-
-                if (rawResult != null && BarcodeScanner.MWBgetResultType() == BarcodeScanner.MWB_RESULT_TYPE_MW) {
-
-                    BarcodeScanner.MWResults results = new BarcodeScanner.MWResults(rawResult);
-
-                    if (results.count > 0) {
-                        mwResult = results.getResult(0);
-                    }
-
-                } else if (rawResult != null
-                        && BarcodeScanner.MWBgetResultType() == BarcodeScanner.MWB_RESULT_TYPE_RAW) {
-                    mwResult = new MWResult();
-                    mwResult.text = rawResult.toString();
-                    mwResult.type = BarcodeScanner.MWBgetLastType();
-                }
+                MWResult mwResult = result(data, width, height);
 
                 if (mwResult != null) {
                     state = State.STOPPED;
@@ -324,5 +323,30 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
                 activeThreads--;
             }
         }).start();
+    }
+
+    private MWResult result(final byte[] data, final int width, final int height) {
+        MWResult mwResult = null;
+        byte[] rawResult = BarcodeScanner.MWBscanGrayscaleImage(data, width, height);
+
+        if (rawResult != null && BarcodeScanner.MWBgetResultType() == BarcodeScanner.MWB_RESULT_TYPE_MW) {
+
+            BarcodeScanner.MWResults results = new BarcodeScanner.MWResults(rawResult);
+
+            if (results.count > 0) {
+                mwResult = results.getResult(0);
+            }
+
+        } else if (rawResult != null && isRawResultType()) {
+            mwResult = new MWResult();
+            mwResult.text = rawResult.toString();
+            mwResult.type = BarcodeScanner.MWBgetLastType();
+        }
+
+        return mwResult;
+    }
+
+    private boolean isRawResultType() {
+        return BarcodeScanner.MWBgetResultType() == BarcodeScanner.MWB_RESULT_TYPE_RAW;
     }
 }
