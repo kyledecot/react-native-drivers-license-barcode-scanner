@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Platform, Alert } from 'react-native';
+import { StyleSheet, Text, View, Platform, Alert, TouchableOpacity } from 'react-native';
 import DriversLicenseBarcodeScanner from 'react-native-drivers-license-barcode-scanner';
 
 // @see https://manateeworks.com/barcode-scanner-sdk
@@ -13,7 +13,11 @@ export default class App extends React.Component {
 
     this.state = {
       value: null,
+      flash: false,
     };
+  }
+  _flash() {
+    return this.state.flash;
   }
 
   _license = () => {
@@ -24,7 +28,7 @@ export default class App extends React.Component {
     return ANDROID_LICENSE;
   }
 
-  _showValue(value) {
+  _handleSuccess = (value) => {
     this.setState({
       value,
     });
@@ -42,23 +46,50 @@ export default class App extends React.Component {
     return (<Text style={styles.value}>{this.state.value}</Text>);
   }
 
+  _handleToggleFlash = () => {
+    this.setState({
+      flash: !this.state.flash,
+    });
+  }
+
+  _renderControls() {
+    return (
+      <TouchableOpacity
+        style={styles.toggleFlashContainer}
+        onPress={this._handleToggleFlash}
+      >
+        <Text style={{
+          fontSize: 40,
+          textAlign: 'center',
+        }}
+        >Toggle the Flash
+        </Text>
+      </TouchableOpacity>
+    );
+  }
+
+
   render() {
     return (
       <View style={styles.container}>
+        {this._renderControls()}
         <DriversLicenseBarcodeScanner
           style={{ flex: 1 }}
           license={this._license()}
-          onSuccess={value => this._showValue(value)}
+          flash={this._flash()}
+          onSuccess={this._handleSuccess}
           onError={this._handleError}
         />
         {this._renderValue()}
-
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  toggleFlashContainer: {
+    // ...StyleSheet.absoluteFillObject,
+  },
   value: {
     fontSize: 20,
     color: '#F00',

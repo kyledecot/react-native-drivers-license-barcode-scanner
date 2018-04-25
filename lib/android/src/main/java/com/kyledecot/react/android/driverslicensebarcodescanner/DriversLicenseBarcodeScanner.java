@@ -144,10 +144,25 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     private void restartPreviewAndDecode() {
         if (isStopped()) {
             preview();
-            
+
             CameraManager.get().requestPreviewFrame(getDecodeHandler(), ID_DECODE);
             autoFocus(getDecodeHandler());
         }
+    }
+
+    public void setFlash(boolean flash) {
+        CameraManager cameraManager = CameraManager.get();
+
+        if (cameraManager == null) {
+            return;
+        }
+
+            if (!cameraManager.isTorchAvailable()) {
+                return;
+
+            }
+
+        cameraManager.setTorch(flash);
     }
 
     public void setLicense(String license) {

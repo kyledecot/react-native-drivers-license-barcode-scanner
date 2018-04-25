@@ -2,6 +2,7 @@ package com.kyledecot.react.android.driverslicensebarcodescanner;
 
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.common.MapBuilder;
@@ -10,6 +11,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
+import android.util.Log;
 import android.view.View;
 
 
@@ -42,6 +44,11 @@ public class DriversLicenseBarcodeScannerManager extends SimpleViewManager<Drive
     }
 
     @Override
+    public void receiveCommand(DriversLicenseBarcodeScanner view, int commandId, @Nullable ReadableArray args) {
+        Log.e("FOOBAR", "COMMAND RECEIVED!!!!");
+    }
+
+    @Override
     @Nullable
     public Map getExportedCustomDirectEventTypeConstants() {
         Map<String, Map<String, String>> map = MapBuilder.of(
@@ -60,6 +67,11 @@ public class DriversLicenseBarcodeScannerManager extends SimpleViewManager<Drive
     @ReactProp(name = "license")
     public void setRegion(DriversLicenseBarcodeScanner view, String license) {
         view.setLicense(license);
+    }
+
+    @ReactProp(name = "flash")
+    public void setFlash(DriversLicenseBarcodeScanner view, boolean flash) {
+        view.setFlash(flash);
     }
 
     @Override
