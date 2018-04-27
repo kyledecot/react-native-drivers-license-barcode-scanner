@@ -131,7 +131,6 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
             try {
                 setDesiredPreviewSize();
                 CameraManager.get().openDriver(getHolder(), true);
-
             } catch (IOException ioe) {
                 return;
             } catch (RuntimeException e) {
@@ -226,6 +225,10 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
       }
   }
 
+  void onHostResume() {
+        Log.e("KYLEDECOT", "onHostResume");
+  }
+
   private boolean isDecoding() {
         return state == State.DECODING;
   }
@@ -304,6 +307,15 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     public void surfaceDestroyed(SurfaceHolder holder) {
         hasSurface = false;
     }
+
+//    public void onConfigurationChanged(Configuration config) {
+//
+//        Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+//        int rotation = display.getRotation();
+//
+//        CameraManager.get().updateCameraOrientation(rotation);
+//
+//    }
 
     private void decode(final byte[] data, final int width, final int height) {
         if (activeThreads >= MAX_THREADS ||isStopped()) {
