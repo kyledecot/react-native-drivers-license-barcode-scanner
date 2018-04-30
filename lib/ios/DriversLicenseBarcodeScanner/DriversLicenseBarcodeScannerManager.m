@@ -6,12 +6,9 @@
 
 RCT_EXPORT_MODULE()
 
-RCT_EXPORT_VIEW_PROPERTY(onLicenseScanned, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onCancel, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onTimeout, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(iosManateeWorksScannerUsername, NSString)
-RCT_EXPORT_VIEW_PROPERTY(iosManateeWorksScannerKey, NSString)
-RCT_EXPORT_VIEW_PROPERTY(iosLicenseParserKey, NSString)
+// RCT_EXPORT_VIEW_PROPERTY(onSuccess, RCTBubblingEventBlock)
+// RCT_EXPORT_VIEW_PROPERTY(onError, RCTBubblingEventBlock)
+// RCT_EXPORT_VIEW_PROPERTY(license, NSString)
 
 //RCT_EXPORT_METHOD(forceTimeout: (nonnull NSNumber *)reactTag)
 //{
