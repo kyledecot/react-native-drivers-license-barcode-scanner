@@ -2,14 +2,12 @@ package com.kyledecot.react.android.driverslicensebarcodescanner;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -104,41 +102,33 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
         });
     }
 
-    private void initCamera() {
-        if (ContextCompat.checkSelfPermission(getCurrentActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            /* WHEN TARGETING ANDROID 6 OR ABOVE, PERMISSION IS NEEDED */
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getCurrentActivity(),
-                    Manifest.permission.CAMERA)) {
+    private void requestCameraPermission() {
+        ActivityCompat.requestPermissions(getCurrentActivity(), new String[]{Manifest.permission.CAMERA},12322);
+    }
 
-                new AlertDialog.Builder(getCurrentActivity()).setMessage("You need to allow access to the Camera")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                ActivityCompat.requestPermissions(getCurrentActivity(),
-                                        new String[]{Manifest.permission.CAMERA}, 12322);
-                            }
-                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // onBackPressed();
-                    }
-                }).create().show();
-            } else {
-                ActivityCompat.requestPermissions(getCurrentActivity(), new String[]{Manifest.permission.CAMERA},
-                        12322);
-            }
+    private boolean hasCameraPermissionBeenGranted() {
+        int cameraPermission = ContextCompat.checkSelfPermission(getCurrentActivity(), Manifest.permission.CAMERA);
+
+        return  cameraPermission == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void initCamera() {
+        if (getHolder() == null) {
+            return;
+        }
+
+        if (!hasCameraPermissionBeenGranted()) {
+            requestCameraPermission();
         } else {
             try {
                 setDesiredPreviewSize();
-                CameraManager.get().openDriver(getHolder(), true);
+                getCameraManager().openDriver(getHolder(), true);
             } catch (IOException ioe) {
-                return;
-            } catch (RuntimeException e) {
-                return;
+                return; // TODO: What causes this and what should we do here?
             }
 
             CameraManager.init(getCurrentActivity());
-            CameraManager.get().startPreview();
+            getCameraManager().startPreview();
             restartPreviewAndDecode();
         }
     }
@@ -168,17 +158,15 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
     }
 
     public void requestPreviewFrame() {
-        CameraManager.get().requestPreviewFrame(getDecodeHandler(), ID_DECODE);
+        getCameraManager().requestPreviewFrame(getDecodeHandler(), ID_DECODE);
     }
 
     public void setFlash(boolean flash) {
-        CameraManager cameraManager = CameraManager.get();
-
-        if (cameraManager == null || !cameraManager.isTorchAvailable()) {
+        if (getCameraManager() == null || !getCameraManager().isTorchAvailable()) {
             return;
         }
 
-        cameraManager.setTorch(flash);
+        getCameraManager().setTorch(flash);
     }
 
     public void setLicense(String license) {
@@ -246,7 +234,11 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
           return;
       }
 
-      CameraManager.get().requestAutoFocus(getHandler(), ID_AUTO_FOCUS);
+      getCameraManager().requestAutoFocus(getHandler(), ID_AUTO_FOCUS);
+  }
+
+  public CameraManager getCameraManager() {
+        return CameraManager.get();
   }
 
   public void onSuccess(String value) {
@@ -275,8 +267,8 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
             MWOverlay.removeOverlay();
         }
 
-        CameraManager.get().stopPreview();
-        CameraManager.get().closeDriver();
+        getCameraManager().stopPreview();
+        getCameraManager().closeDriver();
 
         stop();
         setFlash(false);
@@ -308,14 +300,9 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
         hasSurface = false;
     }
 
-//    public void onConfigurationChanged(Configuration config) {
-//
-//        Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
-//        int rotation = display.getRotation();
-//
-//        CameraManager.get().updateCameraOrientation(rotation);
-//
-//    }
+    public void setOrientation(int orientation) {
+        getCameraManager().updateCameraOrientation(orientation);
+    }
 
     private void decode(final byte[] data, final int width, final int height) {
         if (activeThreads >= MAX_THREADS ||isStopped()) {
