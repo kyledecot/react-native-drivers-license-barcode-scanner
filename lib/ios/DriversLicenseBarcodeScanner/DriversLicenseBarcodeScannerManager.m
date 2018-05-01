@@ -1,14 +1,22 @@
 #import <MapKit/MapKit.h>
 #import "DriversLicenseBarcodeScannerManager.h"
 #import "DriversLicenseBarcodeScannerView.h"
+#import <React/RCTViewManager.h>
+#import <React/RCTBridge.h>
+#import <React/RCTUIManager.h>
+#import <React/RCTConvert+CoreLocation.h>
+#import <React/RCTEventDispatcher.h>
+#import <React/RCTViewManager.h>
+#import <React/RCTConvert.h>
+#import <React/UIView+React.h>
 
 @implementation DriversLicenseBarcodeScannerManager
 
 RCT_EXPORT_MODULE()
 
-// RCT_EXPORT_VIEW_PROPERTY(onSuccess, RCTBubblingEventBlock)
+//RCT_EXPORT_VIEW_PROPERTY(onSuccess, RCTBubblingEventBlock)
 // RCT_EXPORT_VIEW_PROPERTY(onError, RCTBubblingEventBlock)
-// RCT_EXPORT_VIEW_PROPERTY(license, NSString)
+RCT_EXPORT_VIEW_PROPERTY(license, NSString)
 
 //RCT_EXPORT_METHOD(forceTimeout: (nonnull NSNumber *)reactTag)
 //{
@@ -25,7 +33,11 @@ RCT_EXPORT_MODULE()
 
 - (UIView *)view
 {
-    return [[DriversLicenseBarcodeScannerView alloc] initWithFrame:CGRectZero];
+    DriversLicenseBarcodeScannerView *view = [[DriversLicenseBarcodeScannerView alloc] init];
+//    view.bridge = self.bridge;
+//    view.delegate = self;
+    
+    return view;
 }
 
 @end

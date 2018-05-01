@@ -11,6 +11,9 @@
 
 @interface DriversLicenseBarcodeScannerView : UIView<AVCaptureVideoDataOutputSampleBufferDelegate>
 
+@property (nonatomic, weak) NSString *license;
+//@property (nonatomic, weak) RCTBridge *bridge;
+
 -(void)startCapturing;
 
 @end

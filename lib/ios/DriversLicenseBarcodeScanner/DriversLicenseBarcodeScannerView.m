@@ -10,13 +10,30 @@
 
 @implementation DriversLicenseBarcodeScannerView
 
--(id)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame: frame]) {
-        [self startCapturing];
+@synthesize license;
+
+- (instancetype)init
+{
+    if ((self = [super init])) {
+        
+        
     }
     
     return self;
 }
+
+- (void)didMoveToWindow {
+
+    NSLog(@"DID MOVE TO WINDOW");
+}
+
+//- (void)setLicense:(NSString *)license {
+//    self.license = license;
+//}
+//
+//- (NSString *)license {
+//    return self.license;
+//}
 
 -(void)startCapturing {
     NSLog(@"Capturing");

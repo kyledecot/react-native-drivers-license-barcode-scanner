@@ -10,6 +10,7 @@
 		FC4939592080E646005E969C /* DriversLicenseBarcodeScannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = FC4939582080E646005E969C /* DriversLicenseBarcodeScannerView.m */; };
 		FC49397E2080EEF8005E969C /* libBarcodeScanner.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC49396C2080EE74005E969C /* libBarcodeScanner.a */; };
 		FC4939902080F4C7005E969C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC49395B2080E6D9005E969C /* AVFoundation.framework */; };
+		FC52B4FC20990A1F00E5AA45 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC52B4FB20990A1F00E5AA45 /* CoreVideo.framework */; };
 		FCB46F912080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB46F902080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m */; };
 /* End PBXBuildFile section */
 
@@ -35,6 +36,7 @@
 		FC49396D2080EE74005E969C /* MWParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWParser.h; path = DriversLicenseBarcodeScanner/MWParser.h; sourceTree = "<group>"; };
 		FC49396E2080EE74005E969C /* BarcodeScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BarcodeScanner.h; path = DriversLicenseBarcodeScanner/BarcodeScanner.h; sourceTree = "<group>"; };
 		FC49396F2080EE74005E969C /* MWResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWResult.h; path = DriversLicenseBarcodeScanner/MWResult.h; sourceTree = "<group>"; };
+		FC52B4FB20990A1F00E5AA45 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		FCB46F8F2080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DriversLicenseBarcodeScannerManager.h; path = DriversLicenseBarcodeScanner/DriversLicenseBarcodeScannerManager.h; sourceTree = "<group>"; };
 		FCB46F902080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DriversLicenseBarcodeScannerManager.m; path = DriversLicenseBarcodeScanner/DriversLicenseBarcodeScannerManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -44,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC52B4FC20990A1F00E5AA45 /* CoreVideo.framework in Frameworks */,
 				FC4939902080F4C7005E969C /* AVFoundation.framework in Frameworks */,
 				FC49397E2080EEF8005E969C /* libBarcodeScanner.a in Frameworks */,
 			);
@@ -87,6 +90,7 @@
 		FC49395A2080E6D9005E969C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FC52B4FB20990A1F00E5AA45 /* CoreVideo.framework */,
 				FC49395D2080E70E005E969C /* AVKit.framework */,
 				FC49395B2080E6D9005E969C /* AVFoundation.framework */,
 			);
