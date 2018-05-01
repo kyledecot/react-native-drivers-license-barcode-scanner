@@ -15,7 +15,8 @@
     "build:js": "exit 0",
     "build:ios": "bundle install --path ./example/ios/bundles && bundle exec pod install --project-directory=./example/ios/",
     "build:android": "./gradlew :react-native-drivers-license-barcode-scanner:assembleDebug",
-    "ci": "npm run lint"
+    "ci": "npm run lint",
+    "prettier": "find . -name node_modules -prune -or -name '*.js' -print | xargs prettier --write"
   },
   "peerDependencies": {
     "prop-types": "^15.0 || ^16.0",
