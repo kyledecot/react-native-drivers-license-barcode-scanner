@@ -3,9 +3,11 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
 target 'Example' do
-  pod 'react-native-drivers-license-barcode-scanner', path: '../../'
-  pod 'yoga', path: "../../node_modules/react-native/ReactCommon/yoga/yoga.podspec"
-  pod 'React', path: '../../node_modules/react-native', subspecs: [
+  rn_path = '../../node_modules/react-native'
+  rn_drivers_license_barcode_scanner_path = '../../'
+
+  pod 'yoga', path: "#{rn_path}/ReactCommon/yoga/yoga.podspec"
+  pod 'React', path: rn_path, subspecs: [
     'Core',
     'DevSupport',
     'RCTActionSheet',
@@ -21,7 +23,8 @@ target 'Example' do
     'CxxBridge'
   ]
 
-  pod 'DoubleConversion', :podspec => "../../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
-  pod 'glog', :podspec => "../../node_modules/react-native/third-party-podspecs/glog.podspec"
-  pod 'Folly', :podspec => "../../node_modules/react-native/third-party-podspecs/Folly.podspec"
+  pod 'react-native-drivers-license-barcode-scanner', path: rn_drivers_license_barcode_scanner_path
+  pod 'DoubleConversion', :podspec => "#{rn_path}/third-party-podspecs/DoubleConversion.podspec"
+  pod 'glog', :podspec => "#{rn_path}/third-party-podspecs/glog.podspec"
+  pod 'Folly', :podspec => "#{rn_path}/third-party-podspecs/Folly.podspec"
 end
