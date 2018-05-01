@@ -70,10 +70,11 @@ export default class App extends React.Component {
         style={styles.toggleFlashContainer}
         onPress={this._handleToggleFlash}
       >
-        <Text style={{
-          fontSize: 40,
-          textAlign: 'center',
-        }}
+        <Text
+          style={{
+            fontSize: 40,
+            textAlign: 'center',
+          }}
         >Toggle the Flash
         </Text>
       </TouchableOpacity>
