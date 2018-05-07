@@ -1,3 +1,3 @@
-import DriversLicenseBarcodeScanner from "./lib/components/DriversLicenseBarcodeScanner";
+import DriversLicenseBarcodeScanner from './lib/components/DriversLicenseBarcodeScanner';
 
 export default DriversLicenseBarcodeScanner;

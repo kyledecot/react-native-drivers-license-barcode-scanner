@@ -1,18 +1,18 @@
-import React from "react";
+import React from 'react';
 import {
   StyleSheet,
   Text,
   View,
   Platform,
   Alert,
-  TouchableOpacity
-} from "react-native";
-import DriversLicenseBarcodeScanner from "react-native-drivers-license-barcode-scanner";
+  TouchableOpacity,
+} from 'react-native';
+import DriversLicenseBarcodeScanner from 'react-native-drivers-license-barcode-scanner';
 
 // @see https://manateeworks.com/barcode-scanner-sdk
 
-const IOS_LICENSE = "NEUk2MDE1uCn4q+GyGFy8VGeeLeIcUT5dt6REiaI5lM=";
-const ANDROID_LICENSE = "umDQbMBzRwwXVuRPBtLbzcYfPd0SVfpSoq3wVebSGtw=";
+const IOS_LICENSE = 'NEUk2MDE1uCn4q+GyGFy8VGeeLeIcUT5dt6REiaI5lM=';
+const ANDROID_LICENSE = 'umDQbMBzRwwXVuRPBtLbzcYfPd0SVfpSoq3wVebSGtw=';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -20,7 +20,7 @@ export default class App extends React.Component {
 
     this.state = {
       value: null,
-      flash: false
+      flash: false,
     };
   }
   _flash() {
@@ -28,7 +28,7 @@ export default class App extends React.Component {
   }
 
   _license = () => {
-    if (Platform.OS === "ios") {
+    if (Platform.OS === 'ios') {
       return IOS_LICENSE;
     }
 
@@ -37,12 +37,12 @@ export default class App extends React.Component {
 
   _handleSuccess = value => {
     this.setState({
-      value
+      value,
     });
   };
 
   _handleError = error => {
-    Alert.alert("Error", error);
+    Alert.alert('Error', error);
   };
 
   _renderValue() {
@@ -59,13 +59,13 @@ export default class App extends React.Component {
 
   _handlePress = () => {
     this.setState({
-      value: null
+      value: null,
     });
   };
 
   _handleToggleFlash = () => {
     this.setState({
-      flash: !this.state.flash
+      flash: !this.state.flash,
     });
   };
 
@@ -78,7 +78,7 @@ export default class App extends React.Component {
         <Text
           style={{
             fontSize: 40,
-            textAlign: "center"
+            textAlign: 'center',
           }}
         >
           Toggle the Flash
@@ -110,10 +110,10 @@ const styles = StyleSheet.create({
   },
   value: {
     fontSize: 20,
-    color: "#F00",
-    backgroundColor: "transparent"
+    color: '#F00',
+    backgroundColor: 'transparent',
   },
   container: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });
