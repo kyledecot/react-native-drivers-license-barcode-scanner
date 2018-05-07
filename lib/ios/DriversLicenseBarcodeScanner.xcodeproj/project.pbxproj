@@ -12,6 +12,7 @@
 		FC4939902080F4C7005E969C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC49395B2080E6D9005E969C /* AVFoundation.framework */; };
 		FC52B4FC20990A1F00E5AA45 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC52B4FB20990A1F00E5AA45 /* CoreVideo.framework */; };
 		FCB46F912080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB46F902080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m */; };
+		FCC29DF920A0638D00B0A2EA /* libBarcodeScanner.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC49396C2080EE74005E969C /* libBarcodeScanner.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -21,6 +22,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				FCC29DF920A0638D00B0A2EA /* libBarcodeScanner.a in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

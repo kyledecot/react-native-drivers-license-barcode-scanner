@@ -1,5 +1,7 @@
-#import "AppDelegate.h"
 #import <React/RCTRootView.h>
+
+#import "AppDelegate.h"
+#import "ip.h"
 
 @implementation AppDelegate
 
@@ -7,7 +9,7 @@
 {
   NSURL *jsCodeLocation;
 
-  jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/example/index.bundle?platform=ios&dev=true"];
+  jsCodeLocation = [NSURL URLWithString:[NSString stringWithFormat:@"http://%1$@:8081/example/index.bundle?platform=ios&dev=true", LOCAL_IP_ADDRESS]];
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Example"

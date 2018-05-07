@@ -8,14 +8,19 @@
 
 #import "DriversLicenseBarcodeScannerView.h"
 
-@implementation DriversLicenseBarcodeScannerView
+@implementation DriversLicenseBarcodeScannerView {
+    NSString *_license;
+    BOOL _flash;
+    AVCaptureDevice *_device;
+}
 
 @synthesize license;
 
 - (instancetype)init
 {
     if ((self = [super init])) {
-        
+        _license = @"";
+        _flash = FALSE;
         
     }
     
@@ -23,22 +28,76 @@
 }
 
 - (void)didMoveToWindow {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:)name:UIDeviceOrientationDidChangeNotification object:nil];
+    // TODO: How/when do I remove this observer?
 
     NSLog(@"DID MOVE TO WINDOW");
+    NSLog(@"WINDOW FRAME: %@", NSStringFromCGRect(self.window.frame));
+    
+    
+    [self startCapturing];
 }
 
-//- (void)setLicense:(NSString *)license {
-//    self.license = license;
-//}
-//
-//- (NSString *)license {
-//    return self.license;
-//}
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    NSLog(@"NEW FRAME: %@", NSStringFromCGRect(self.frame));
+}
+
+- (void) didRotate:(NSNotification *)notificationl
+{
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    
+    NSLog(@"WE ROTATED");
+    [self startCapturing];
+}
+
+- (void)setFlash:(BOOL)flash {
+    _flash = flash;
+    
+    [self setTorch:flash];
+    
+    NSLog(@"SETTING THE FLASH");
+}
+
+- (BOOL)flash {
+    return _flash;
+}
+
+- (void)setLicense:(NSString *)license {
+    _license = license;
+    
+    NSLog(@"SETTING THE LICENSE");
+}
+
+- (void)setTorch:(bool) torchOn {
+    NSLog(@"TURN THE TORCH");
+    
+    if ([self.device isTorchModeSupported: AVCaptureTorchModeOn]) {
+        NSError *error;
+        
+        if ([self.device lockForConfiguration:&error]) {
+            if (torchOn)
+                [self.device setTorchMode:AVCaptureTorchModeOn];
+            else
+                [self.device setTorchMode:AVCaptureTorchModeOff];
+            [self.device unlockForConfiguration];
+        } else {
+            
+        }
+    }
+}
+
+- (NSString *)license {
+    return _license;
+}
+
+
 
 -(void)startCapturing {
     NSLog(@"Capturing");
     
-    AVCaptureDevice *device = [self frontCamera];
+    AVCaptureDevice *device = [self backCamera];
     
     AVCaptureVideoDataOutput *captureOutput = [[AVCaptureVideoDataOutput alloc] init];
     
@@ -69,10 +128,13 @@
         }
         
         long processorCount = NSProcessInfo.processInfo.processorCount;
+
         
         AVCaptureVideoPreviewLayer *previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession: captureSession];
-        [previewLayer setFrame: CGRectMake(0, 0, 500, 500)]; // TODO: how do I get full screen in all orientations?
+        [previewLayer setFrame: self.frame]; // TODO: how do I get full screen in all orientations?
         [previewLayer setVideoGravity: AVLayerVideoGravityResizeAspectFill];
+        
+        NSLog(@"%@", NSStringFromCGRect(self.frame));
         
         [[self layer] addSublayer: previewLayer];
         
@@ -109,13 +171,15 @@
     }
 }
 
-- (AVCaptureDevice *)frontCamera {
+- (AVCaptureDevice *)backCamera {
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    
     for (AVCaptureDevice *device in devices) {
-        if ([device position] == AVCaptureDevicePositionFront) {
+        if ([device position] == AVCaptureDevicePositionBack) {
             return device;
         }
     }
+    
     return nil;
 }
 
@@ -123,7 +187,7 @@
 
 - (void)captureOutput:(AVCaptureOutput *)output didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
     
-    NSLog(@"Captured BUFFER");
+//    NSLog(@"Captured BUFFER");
     
     CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     
