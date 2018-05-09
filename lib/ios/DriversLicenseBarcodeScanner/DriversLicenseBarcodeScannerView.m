@@ -7,14 +7,13 @@
 //
 
 #import "DriversLicenseBarcodeScannerView.h"
+#import "UIView+React.h"
 
 @implementation DriversLicenseBarcodeScannerView {
     NSString *_license;
     BOOL _flash;
     AVCaptureDevice *_device;
 }
-
-@synthesize license;
 
 - (instancetype)init
 {
@@ -41,7 +40,9 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    NSLog(@"NEW FRAME: %@", NSStringFromCGRect(self.frame));
+    CGRect frame = [self frame];
+    
+    
 }
 
 - (void) didRotate:(NSNotification *)notificationl
@@ -56,8 +57,6 @@
     _flash = flash;
     
     [self setTorch:flash];
-    
-    NSLog(@"SETTING THE FLASH");
 }
 
 - (BOOL)flash {
@@ -71,19 +70,19 @@
 }
 
 - (void)setTorch:(bool) torchOn {
-    NSLog(@"TURN THE TORCH");
     
-    if ([self.device isTorchModeSupported: AVCaptureTorchModeOn]) {
+    if ([_device isTorchModeSupported: AVCaptureTorchModeOn]) {
         NSError *error;
         
-        if ([self.device lockForConfiguration:&error]) {
-            if (torchOn)
-                [self.device setTorchMode:AVCaptureTorchModeOn];
-            else
-                [self.device setTorchMode:AVCaptureTorchModeOff];
-            [self.device unlockForConfiguration];
+        if ([_device lockForConfiguration:&error]) {
+            if (torchOn) {
+                [_device setTorchMode:AVCaptureTorchModeOn];
+            } else {
+                [_device setTorchMode:AVCaptureTorchModeOff];
+            }
+            [_device unlockForConfiguration];
         } else {
-            
+            NSLog(@"ERROR SETTING TORCH: %@", [error localizedDescription]);
         }
     }
 }
@@ -92,12 +91,10 @@
     return _license;
 }
 
-
-
 -(void)startCapturing {
     NSLog(@"Capturing");
-    
-    AVCaptureDevice *device = [self backCamera];
+
+    _device = [self backCamera];
     
     AVCaptureVideoDataOutput *captureOutput = [[AVCaptureVideoDataOutput alloc] init];
     
@@ -112,7 +109,7 @@
     AVCaptureSession *captureSession = [[AVCaptureSession alloc] init];
     
     NSError *error = nil;
-    AVCaptureDeviceInput *input = [[AVCaptureDeviceInput alloc] initWithDevice:device error:&error];
+    AVCaptureDeviceInput *input = [[AVCaptureDeviceInput alloc] initWithDevice:_device error:&error];
     
     if (error != nil) {
         NSLog(@"ERROR: %@", error);
@@ -129,9 +126,10 @@
         
         long processorCount = NSProcessInfo.processInfo.processorCount;
 
+        UIViewController *vc = [self reactViewController];
         
         AVCaptureVideoPreviewLayer *previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession: captureSession];
-        [previewLayer setFrame: self.frame]; // TODO: how do I get full screen in all orientations?
+        [previewLayer setFrame: [self reactContentFrame]]; // TODO: how do I get full screen in all orientations?
         [previewLayer setVideoGravity: AVLayerVideoGravityResizeAspectFill];
         
         NSLog(@"%@", NSStringFromCGRect(self.frame));
