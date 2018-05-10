@@ -1,5 +1,13 @@
 #import "DriversLicenseBarcodeScannerView.h"
 #import "UIView+React.h"
+#import "BarcodeScanner.h"
+
+typedef NS_ENUM(NSUInteger, DriversLicenseBarcodeScannerViewState) {
+    kDecoding,
+    kReady,
+    kScanning,
+    kActive
+};
 
 @implementation DriversLicenseBarcodeScannerView {
     NSString *_license;
@@ -9,19 +17,33 @@
     AVCaptureSession *_captureSession;
     AVCaptureVideoDataOutput *_captureOutput;
     AVCaptureDeviceInput *_captureDeviceInput;
+    DriversLicenseBarcodeScannerViewState _state;
+    int _activeThreads;
+    int _availableThreads;
+    
 }
 
 - (instancetype)init {
     if ((self = [super init])) {
         NSError *error;
 
+        _activeThreads = 0;
+        _availableThreads = 2; // TODO: Figure this out
+        
         _license = @"";
+        _state = kReady;
         _flash = FALSE;
         _captureDevice = [self backCamera];
         _captureOutput = [self setupCaptureOutput];
         _captureDeviceInput = [self setupCaptureDeviceInput:_captureDevice error:&error];
         _captureSession = [self setupCaptureSessionWithDevice:_captureDevice captureOutput:_captureOutput];
         _previewLayer = [self setupPreviewLayerWithCaptureSession:_captureSession];
+        
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self selector:@selector(orientationChanged:)
+         name:UIDeviceOrientationDidChangeNotification
+         object:[UIDevice currentDevice]];
         
         if (error == nil) {
             [[self layer] addSublayer: _previewLayer];
@@ -31,6 +53,14 @@
     }
     
     return self;
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void) orientationChanged:(NSNotification *)notification {
+    [self updatePreviewLayerOrientation];
 }
 
 - (AVCaptureVideoPreviewLayer *)setupPreviewLayerWithCaptureSession: (AVCaptureSession *)session {
@@ -57,6 +87,7 @@
 }
 
 - (AVCaptureSession *)setupCaptureSessionWithDevice:(AVCaptureDevice *)device captureOutput:(AVCaptureOutput *)output {
+
     NSError *error;
     AVCaptureSession *captureSession = [[AVCaptureSession alloc] init];
     AVCaptureDeviceInput *input = [[AVCaptureDeviceInput alloc] initWithDevice: device error: &error];
@@ -93,22 +124,19 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    [self updatePreviewLayer];
+    [self updatePreviewLayerFrame];
 }
 
-- (void)updatePreviewLayer {
-    _previewLayer.frame = [self frame];
-    
-    // TODO: This doesn't *quite* work as expected. For instance when going from landscape left to landscape right the value will become wrong....
+- (void)updatePreviewLayerOrientation {
     switch ([[UIDevice currentDevice] orientation]) {
         case UIDeviceOrientationPortrait:
             _previewLayer.connection.videoOrientation = AVCaptureVideoOrientationPortrait;
             break;
         case UIDeviceOrientationLandscapeLeft:
-            _previewLayer.connection.videoOrientation = AVCaptureVideoOrientationLandscapeRight;
+            _previewLayer.connection.videoOrientation = AVCaptureVideoOrientationLandscapeLeft;
             break;
         case UIDeviceOrientationLandscapeRight:
-            _previewLayer.connection.videoOrientation = AVCaptureVideoOrientationLandscapeLeft;
+            _previewLayer.connection.videoOrientation = AVCaptureVideoOrientationLandscapeRight;
             break;
         case UIDeviceOrientationPortraitUpsideDown:
             _previewLayer.connection.videoOrientation = AVCaptureVideoOrientationPortraitUpsideDown;
@@ -116,6 +144,10 @@
         default:
             break;
     }
+}
+
+- (void)updatePreviewLayerFrame {
+    _previewLayer.frame = [self frame];
 }
 
 - (void)setFlash:(BOOL)flash {
@@ -162,8 +194,6 @@
         
 //        long processorCount = NSProcessInfo.processInfo.processorCount;
 
-//        UIViewController *vc = [self reactViewController];
-    
     
         [_captureSession startRunning];
  
@@ -209,93 +239,89 @@
     return nil;
 }
 
+// MARK: -
 // MARK: AVCaptureVideoDataOutputSampleBufferDelegate
 
 - (void)captureOutput:(AVCaptureOutput *)output didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
-    
-//    NSLog(@"Captured BUFFER");
+    if ((_state != kActive || _state != kDecoding) && _activeThreads >= _availableThreads) {
+        return;
+    }
+
+    //
+    //    registerDecoder(username: iosManateeWorksScannerUsername!, key: iosManateeWorksScannerKey!)
+    //    setupDecoder()
+    //
+
+    if (_state != kDecoding) {
+        _state = kDecoding;
+    }
+
+    _activeThreads ++;
     
     CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     
-//    CVPixelBufferLockBaseAddress(pixelBuffer, CVPixelBufferLock<#CVPixelBufferLockFlags lockFlags#>)
+    CVPixelBufferLockBaseAddress(pixelBuffer, 0);
     
     CVPixelBufferRef baseAddress = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
-}
+    long bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0);
+    int width = (int) bytesPerRow;
+    int height = (int) CVPixelBufferGetHeightOfPlane(pixelBuffer, 0);
+    
+    unsigned char *frameBuffer = malloc(width * height);
+    memcpy(frameBuffer, baseAddress, width * height);
+    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
 
-//func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
-//    guard (state == .active || state == .decoding) && activeThreads < availableThreads else {
-//        return
-//    }
-//
-//    registerDecoder(username: iosManateeWorksScannerUsername!, key: iosManateeWorksScannerKey!)
-//    setupDecoder()
-//
-//    if state != .decoding {
-//        state = .decoding
-//    }
-//
-//    activeThreads += 1
-//
-//    let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)! as CVPixelBuffer
-//
-//    CVPixelBufferLockBaseAddress(pixelBuffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
-//
-//    //Get information about the image
-//    let baseAddress = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0)
-//
-//    let bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0)
-//    let width: Int32 = Int32(bytesPerRow)
-//    let height: Int32 = Int32(CVPixelBufferGetHeightOfPlane(pixelBuffer, 0))
-//
-//    let frameBuffer = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(width * height))
-//    frameBuffer.initialize(from: UnsafeMutablePointer<UInt8>(baseAddress!.assumingMemoryBound(to: UInt8.self)), count: Int(width * height))
-//
-//    CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
-//
-//    DispatchQueue.global(qos: .default).async {
-//        var resLength: Int32 = 0
-//
-//        var pResult: UnsafeMutablePointer<UInt8>? = UnsafeMutablePointer<UInt8>.allocate(capacity: 8)
-//
-//        resLength = MWB_scanGrayscaleImage(frameBuffer, width, height, &pResult)
-//
-//        frameBuffer.deallocate(capacity: Int(width * height))
-//
-//        var mwResults: MWResults! = nil
-//        var mwResult: MWResult! = nil
-//        if resLength > 0 {
-//            if self.state == .standby {
-//                resLength = 0
-//                free(pResult)
-//            } else {
-//                mwResults =  MWResults(buffer: pResult, length: Int(resLength))
-//                if mwResults != nil && mwResults.count > 0 {
-//                    mwResult = mwResults.results.object(at: 0) as! MWResult
-//                }
-//                free(pResult)
-//            }
-//        }
-//
-//        if let mwResult = mwResult {
-//            self.state = .standby
-//
-//            self.captureSession.stopRunning()
-//
-//            DispatchQueue.main.async {
-//                self.captureSession.stopRunning()
-//
-//                let license = DriverLicense()
-//                let success = license.parseDLString(mwResult.text, hideSerialAlert: false)
-//                if !success {
-//                    Analytics.driverLicenseParseError(rawLicense: mwResult.text)
-//                }
-//                self.fireOnLicenseScanned(driverLicense: license, barcode: mwResult.text, parsed: success)
-//            }
-//        } else {
-//            self.state = .active
-//        }
-//        self.activeThreads -= 1
-//    }
-//}
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(queue, ^{
+        
+        unsigned char *pResult = NULL;
+        
+        int resLength = MWB_scanGrayscaleImage(frameBuffer,width,height, &pResult);
+        free(frameBuffer);
+
+        //
+        //        resLength = MWB_scanGrayscaleImage(frameBuffer, width, height, &pResult)
+        //
+        //        frameBuffer.deallocate(capacity: Int(width * height))
+        //
+        //        var mwResults: MWResults! = nil
+        //        var mwResult: MWResult! = nil
+        //        if resLength > 0 {
+        //            if self.state == .standby {
+        //                resLength = 0
+        //                free(pResult)
+        //            } else {
+        //                mwResults =  MWResults(buffer: pResult, length: Int(resLength))
+        //                if mwResults != nil && mwResults.count > 0 {
+        //                    mwResult = mwResults.results.object(at: 0) as! MWResult
+        //                }
+        //                free(pResult)
+        //            }
+        //        }
+        //
+        //        if let mwResult = mwResult {
+        //            self.state = .standby
+        //
+        //            self.captureSession.stopRunning()
+        //
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self->_captureSession stopRunning];
+            //                self.captureSession.stopRunning()
+            //
+            //                let license = DriverLicense()
+            //                let success = license.parseDLString(mwResult.text, hideSerialAlert: false)
+            //                if !success {
+            //                    Analytics.driverLicenseParseError(rawLicense: mwResult.text)
+            //                }
+            //                self.fireOnLicenseScanned(driverLicense: license, barcode: mwResult.text, parsed: success)
+            //            }
+            //        } else {
+            //            self.state = .active
+            //        }
+            self->_activeThreads --;
+        });
+    });
+}
 
 @end
