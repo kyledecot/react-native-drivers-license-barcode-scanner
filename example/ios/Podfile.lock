@@ -101,7 +101,7 @@ SPEC CHECKSUMS:
   Folly: 211775e49d8da0ca658aebc8eab89d642935755c
   glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
   React: aa2040dbb6f317b95314968021bd2888816e03d5
-  react-native-drivers-license-barcode-scanner: 39741fd8a369d2cfd8a65c0c1fcaf5851d53c499
+  react-native-drivers-license-barcode-scanner: 5d0187c78d7e8c43fd44151521ca44a0bb6738ab
   yoga: a23273df0088bf7f2bb7e5d7b00044ea57a2a54a
 
 PODFILE CHECKSUM: 665cf418a4951e4840776e83bc225da512a9d5e9

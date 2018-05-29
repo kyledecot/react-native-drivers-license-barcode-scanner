@@ -20,4 +20,6 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "8.0"
 
   s.dependency 'React'
+
+  s.libraries = "BarcodeScanner"
 end
