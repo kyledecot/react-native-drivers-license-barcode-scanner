@@ -22,4 +22,7 @@ Pod::Spec.new do |s|
   s.dependency 'React'
 
   s.libraries = "BarcodeScanner"
+  s.xcconfig = {
+    "OTHER_LDFLAGS": "-L$(PODS_ROOT)/../../../lib/ios/DriversLicenseBarcodeScanner"
+  }
 end

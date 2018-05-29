@@ -255,6 +255,21 @@
 				);
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-L/Users/kyledecot/Desktop/react-native-drivers-license-barcode-scanner/lib/ios/DriversLicenseBarcodeScanner",
+					"-l\"BarcodeScanner\"",
+					"-l\"DoubleConversion\"",
+					"-l\"Folly\"",
+					"-l\"React\"",
+					"-l\"glog\"",
+					"-l\"react-native-drivers-license-barcode-scanner\"",
+					"-l\"stdc++\"",
+					"-l\"yoga\"",
+					"-framework",
+					"\"JavaScriptCore\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kyledecot.react-native-drivers-license-scanner-example";
 				PRODUCT_NAME = Example;
 			};
@@ -275,6 +290,21 @@
 				);
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-L/Users/kyledecot/Desktop/react-native-drivers-license-barcode-scanner/lib/ios/DriversLicenseBarcodeScanner",
+					"-l\"BarcodeScanner\"",
+					"-l\"DoubleConversion\"",
+					"-l\"Folly\"",
+					"-l\"React\"",
+					"-l\"glog\"",
+					"-l\"react-native-drivers-license-barcode-scanner\"",
+					"-l\"stdc++\"",
+					"-l\"yoga\"",
+					"-framework",
+					"\"JavaScriptCore\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kyledecot.react-native-drivers-license-scanner-example";
 				PRODUCT_NAME = Example;
 			};
