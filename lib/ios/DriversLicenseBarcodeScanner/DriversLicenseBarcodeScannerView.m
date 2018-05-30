@@ -1,6 +1,63 @@
 #import "DriversLicenseBarcodeScannerView.h"
 #import "UIView+React.h"
 #import "BarcodeScanner.h"
+#include <mach/mach_host.h>
+#import "MWResult.h"
+
+typedef enum eMainScreenState {
+    NORMAL,
+    LAUNCHING_CAMERA,
+    CAMERA,
+    CAMERA_DECODING,
+    DECODE_DISPLAY,
+    CANCELLING
+} MainScreenState;
+
+
+
+#define OVERLAY_MODE OM_MWOVERLAY
+
+#define USE_MWANALYTICS false
+
+#define USE_MWPARSER    false
+/* Parser */
+/*
+ *   Set the desired parser type
+ *   Available options:
+ *       MWP_PARSER_MASK_NONE
+ *       MWP_PARSER_MASK_IUID
+ *       MWP_PARSER_MASK_ISBT
+ *       MWP_PARSER_MASK_AAMVA
+ *       MWP_PARSER_MASK_HIBC
+ *       MWP_PARSER_MASK_AUTO
+ */
+#define MWPARSER_MASK   MWP_PARSER_MASK_AUTO
+
+#define USE_60_FPS      false
+
+#if USE_MWPARSER
+#import "MWParser.h"
+#endif
+
+
+#if USE_MWANALYTICS
+#import "MWAnalytics.h"
+#endif
+
+#define PDF_OPTIMIZED   false
+
+#define MAX_THREADS 2
+
+#define MAX_DIGITAL_ZOOM 4
+
+// !!! Rects are in format: x, y, width, height !!!
+#define RECT_LANDSCAPE_1D       4, 20, 92, 60
+#define RECT_LANDSCAPE_2D       20, 5, 60, 90
+#define RECT_PORTRAIT_1D        20, 4, 60, 92
+#define RECT_PORTRAIT_2D        20, 5, 60, 90
+#define RECT_FULL_1D            4, 4, 92, 92
+#define RECT_FULL_2D            20, 5, 60, 90
+#define RECT_DOTCODE            30, 20, 40, 60
 
 typedef NS_ENUM(NSUInteger, DriversLicenseBarcodeScannerViewState) {
     kDecoding,
@@ -17,10 +74,36 @@ typedef NS_ENUM(NSUInteger, DriversLicenseBarcodeScannerViewState) {
     AVCaptureSession *_captureSession;
     AVCaptureVideoDataOutput *_captureOutput;
     AVCaptureDeviceInput *_captureDeviceInput;
-    DriversLicenseBarcodeScannerViewState _state;
+    MainScreenState _state;
     int _activeThreads;
     int _availableThreads;
+    unsigned char *baseAddress;
+    int width;
+    int height;
+    int bytesPerRow;
     
+    
+    
+    
+    
+    
+    
+    bool running;
+    int activeThreads;
+    int availableThreads;
+    
+    MainScreenState state;
+    
+
+    NSTimer *focusTimer;
+    
+    int param_ZoomLevel1;
+    int param_ZoomLevel2;
+    int zoomLevel;
+    bool videoZoomSupported;
+    float firstZoom;
+    float secondZoom;
+    float digitalZoom;
 }
 
 - (instancetype)init {
@@ -31,7 +114,7 @@ typedef NS_ENUM(NSUInteger, DriversLicenseBarcodeScannerViewState) {
         _availableThreads = 2; // TODO: Figure this out
         
         _license = @"";
-        _state = kReady;
+        _state = NORMAL;
         _flash = FALSE;
         _captureDevice = [self backCamera];
         _captureOutput = [self setupCaptureOutput];
@@ -133,10 +216,10 @@ typedef NS_ENUM(NSUInteger, DriversLicenseBarcodeScannerViewState) {
             _previewLayer.connection.videoOrientation = AVCaptureVideoOrientationPortrait;
             break;
         case UIDeviceOrientationLandscapeLeft:
-            _previewLayer.connection.videoOrientation = AVCaptureVideoOrientationLandscapeLeft;
+            _previewLayer.connection.videoOrientation = AVCaptureVideoOrientationLandscapeRight;
             break;
         case UIDeviceOrientationLandscapeRight:
-            _previewLayer.connection.videoOrientation = AVCaptureVideoOrientationLandscapeRight;
+            _previewLayer.connection.videoOrientation = AVCaptureVideoOrientationLandscapeLeft;
             break;
         case UIDeviceOrientationPortraitUpsideDown:
             _previewLayer.connection.videoOrientation = AVCaptureVideoOrientationPortraitUpsideDown;
@@ -243,84 +326,114 @@ typedef NS_ENUM(NSUInteger, DriversLicenseBarcodeScannerViewState) {
 // MARK: AVCaptureVideoDataOutputSampleBufferDelegate
 
 - (void)captureOutput:(AVCaptureOutput *)output didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
-    if ((_state != kActive || _state != kDecoding) && _activeThreads >= _availableThreads) {
+    if (state != CAMERA && state != CAMERA_DECODING) {
         return;
     }
-
-    //
-    //    registerDecoder(username: iosManateeWorksScannerUsername!, key: iosManateeWorksScannerKey!)
-    //    setupDecoder()
-    //
-
-    if (_state != kDecoding) {
-        _state = kDecoding;
+    
+    if (activeThreads >= availableThreads){
+        return;
     }
-
-    _activeThreads ++;
     
-    CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    if (_state != CAMERA_DECODING)
+    {
+        _state = CAMERA_DECODING;
+    }
     
-    CVPixelBufferLockBaseAddress(pixelBuffer, 0);
+    activeThreads++;
     
-    CVPixelBufferRef baseAddress = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
-    long bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0);
-    int width = (int) bytesPerRow;
-    int height = (int) CVPixelBufferGetHeightOfPlane(pixelBuffer, 0);
+    
+    CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    //Lock the image buffer
+    CVPixelBufferLockBaseAddress(imageBuffer,0);
+    //Get information about the image
+    baseAddress = (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(imageBuffer,0);
+    int pixelFormat = CVPixelBufferGetPixelFormatType(imageBuffer);
+    switch (pixelFormat) {
+        case kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange:
+            //NSLog(@"Capture pixel format=NV12");
+            bytesPerRow = (int) CVPixelBufferGetBytesPerRowOfPlane(imageBuffer,0);
+            width = bytesPerRow;//CVPixelBufferGetWidthOfPlane(imageBuffer,0);
+            height = (int) CVPixelBufferGetHeightOfPlane(imageBuffer,0);
+            break;
+        case kCVPixelFormatType_422YpCbCr8:
+            //NSLog(@"Capture pixel format=UYUY422");
+            bytesPerRow = (int) CVPixelBufferGetBytesPerRowOfPlane(imageBuffer,0);
+            width = (int) CVPixelBufferGetWidth(imageBuffer);
+            height = (int) CVPixelBufferGetHeight(imageBuffer);
+            int len = width*height;
+            int dstpos=1;
+            for (int i=0;i<len;i++){
+                baseAddress[i]=baseAddress[dstpos];
+                dstpos+=2;
+            }
+            
+            break;
+        default:
+            //    NSLog(@"Capture pixel format=RGB32");
+            break;
+    }
+    
     
     unsigned char *frameBuffer = malloc(width * height);
     memcpy(frameBuffer, baseAddress, width * height);
-    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(queue, ^{
+    CVPixelBufferUnlockBaseAddress(imageBuffer,0);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        unsigned char *pResult = NULL;
+        
+        
+        unsigned char *pResult=NULL;
         
         int resLength = MWB_scanGrayscaleImage(frameBuffer,width,height, &pResult);
+        
+        
+        
+        
+        
         free(frameBuffer);
-
-        //
-        //        resLength = MWB_scanGrayscaleImage(frameBuffer, width, height, &pResult)
-        //
-        //        frameBuffer.deallocate(capacity: Int(width * height))
-        //
-        //        var mwResults: MWResults! = nil
-        //        var mwResult: MWResult! = nil
-        //        if resLength > 0 {
-        //            if self.state == .standby {
-        //                resLength = 0
-        //                free(pResult)
-        //            } else {
-        //                mwResults =  MWResults(buffer: pResult, length: Int(resLength))
-        //                if mwResults != nil && mwResults.count > 0 {
-        //                    mwResult = mwResults.results.object(at: 0) as! MWResult
-        //                }
-        //                free(pResult)
-        //            }
-        //        }
-        //
-        //        if let mwResult = mwResult {
-        //            self.state = .standby
-        //
-        //            self.captureSession.stopRunning()
-        //
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self->_captureSession stopRunning];
-            //                self.captureSession.stopRunning()
-            //
-            //                let license = DriverLicense()
-            //                let success = license.parseDLString(mwResult.text, hideSerialAlert: false)
-            //                if !success {
-            //                    Analytics.driverLicenseParseError(rawLicense: mwResult.text)
-            //                }
-            //                self.fireOnLicenseScanned(driverLicense: license, barcode: mwResult.text, parsed: success)
-            //            }
-            //        } else {
-            //            self.state = .active
-            //        }
-            self->_activeThreads --;
-        });
+        
+        
+        // NSLog(@"Frame decoded. Active threads: %d", activeThreads);
+        
+        MWResults *mwResults = nil;
+        MWResult *mwResult = nil;
+        if (resLength > 0){
+            
+            if (_state == NORMAL){
+                resLength = 0;
+                free(pResult);
+                
+            } else {
+                mwResults = [[MWResults alloc] initWithBuffer:pResult];
+                if (mwResults && mwResults.count > 0){
+                    mwResult = [mwResults resultAtIntex:0];
+                }
+                
+                free(pResult);
+            }
+        }
+        
+        //CVPixelBufferUnlockBaseAddress(imageBuffer,0);
+        
+        //ignore results less than 4 characters - probably false detection
+        if (mwResult)
+        {
+            
+            
+            _state = NORMAL;
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                [_captureSession stopRunning];
+                NSLog(@"FOUND ONE!");
+            });
+            
+        }
+        else
+        {
+            _state = CAMERA;
+        }
+        
+        
+        activeThreads --;
+        
     });
 }
 

@@ -6,6 +6,7 @@ import {
   Platform,
   Alert,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import DriversLicenseBarcodeScanner from 'react-native-drivers-license-barcode-scanner';
 
@@ -79,6 +80,7 @@ export default class App extends React.Component {
           style={{
             fontSize: 40,
             textAlign: 'center',
+            color: '#FFF',
           }}
         >
           Toggle the Flash
@@ -89,22 +91,28 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        {this._renderControls()}
-        <DriversLicenseBarcodeScanner
-          style={{ flex: 1 }}
-          license={this._license()}
-          flash={this._flash()}
-          onSuccess={this._handleSuccess}
-          onError={this._handleError}
-        />
-        {this._renderValue()}
-      </View>
+      <SafeAreaView style={styles.safeAreaView}>
+        <View style={styles.container}>
+          {this._renderControls()}
+          <DriversLicenseBarcodeScanner
+            style={{ flex: 1 }}
+            license={this._license()}
+            flash={this._flash()}
+            onSuccess={this._handleSuccess}
+            onError={this._handleError}
+          />
+          {this._renderValue()}
+        </View>
+      </SafeAreaView>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  safeAreaView: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
   toggleFlashContainer: {
     // ...StyleSheet.absoluteFillObject,
   },

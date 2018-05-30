@@ -8,25 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		FC4939592080E646005E969C /* DriversLicenseBarcodeScannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = FC4939582080E646005E969C /* DriversLicenseBarcodeScannerView.m */; };
-		FC49397E2080EEF8005E969C /* libBarcodeScanner.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC49396C2080EE74005E969C /* libBarcodeScanner.a */; };
 		FC4939902080F4C7005E969C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC49395B2080E6D9005E969C /* AVFoundation.framework */; };
 		FC52B4FC20990A1F00E5AA45 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC52B4FB20990A1F00E5AA45 /* CoreVideo.framework */; };
 		FCB46F912080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB46F902080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m */; };
-		FCC29DF920A0638D00B0A2EA /* libBarcodeScanner.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC49396C2080EE74005E969C /* libBarcodeScanner.a */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		11FA5C4F1C4A1296003AC2EE /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
-			files = (
-				FCC29DF920A0638D00B0A2EA /* libBarcodeScanner.a in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		11FA5C511C4A1296003AC2EE /* libDriversLicenseBarcodeScanner.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDriversLicenseBarcodeScanner.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,7 +35,6 @@
 			files = (
 				FC52B4FC20990A1F00E5AA45 /* CoreVideo.framework in Frameworks */,
 				FC4939902080F4C7005E969C /* AVFoundation.framework in Frameworks */,
-				FC49397E2080EEF8005E969C /* libBarcodeScanner.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,7 +92,6 @@
 			buildPhases = (
 				11FA5C4D1C4A1296003AC2EE /* Sources */,
 				11FA5C4E1C4A1296003AC2EE /* Frameworks */,
-				11FA5C4F1C4A1296003AC2EE /* CopyFiles */,
 			);
 			buildRules = (
 			);
