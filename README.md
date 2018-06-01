@@ -2,9 +2,10 @@
 
 ## Demo
 
-```
+```bash
 bundle install
-(cd example/ios && pod install)
+yarn install
+(cd example/ios && bundle exec pod install)
 yarn start
 yarn run:ios
 ```
