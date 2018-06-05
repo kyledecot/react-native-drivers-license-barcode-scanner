@@ -258,8 +258,6 @@
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
-					"-L/Users/kyledecot/Desktop/react-native-drivers-license-barcode-scanner/lib/ios/DriversLicenseBarcodeScanner",
-					"-l\"BarcodeScanner\"",
 					"-l\"DoubleConversion\"",
 					"-l\"Folly\"",
 					"-l\"React\"",
@@ -293,8 +291,6 @@
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
-					"-L/Users/kyledecot/Desktop/react-native-drivers-license-barcode-scanner/lib/ios/DriversLicenseBarcodeScanner",
-					"-l\"BarcodeScanner\"",
 					"-l\"DoubleConversion\"",
 					"-l\"Folly\"",
 					"-l\"React\"",

@@ -21,5 +21,6 @@ Pod::Spec.new do |s|
 
   s.dependency 'React'
 
+  s.vendored_libraries = 'lib/ios/DriversLicenseBarcodeScanner/libBarcodeScanner.a'
   s.libraries = "BarcodeScanner"
 end
