@@ -6,11 +6,15 @@ import {
   Platform,
   Alert,
   TouchableOpacity,
+  Image,
   SafeAreaView,
 } from 'react-native';
 import DriversLicenseBarcodeScanner from 'react-native-drivers-license-barcode-scanner';
 
 // @see https://manateeworks.com/barcode-scanner-sdk
+
+const TORCH_IMAGE_ACTIVE = require('./ic_flash_on.png');
+const TORCH_IMAGE_INACTIVE = require('./ic_flash_off.png');
 
 const IOS_LICENSE = 'NEUk2MDE1uCn4q+GyGFy8VGeeLeIcUT5dt6REiaI5lM=';
 const ANDROID_LICENSE = 'umDQbMBzRwwXVuRPBtLbzcYfPd0SVfpSoq3wVebSGtw=';
@@ -21,11 +25,11 @@ export default class App extends React.Component {
 
     this.state = {
       value: null,
-      flash: false,
+      torch: false,
     };
   }
-  _flash() {
-    return this.state.flash;
+  _torch() {
+    return this.state.torch;
   }
 
   _license = () => {
@@ -64,64 +68,79 @@ export default class App extends React.Component {
     });
   };
 
-  _handleToggleFlash = () => {
+  _handleToggleTorch = () => {
     this.setState({
-      flash: !this.state.flash,
+      torch: !this.state.torch,
     });
   };
 
   _renderControls() {
+    const source = this.state.torch ? TORCH_IMAGE_ACTIVE : TORCH_IMAGE_INACTIVE;
+
     return (
       <TouchableOpacity
         style={styles.toggleFlashContainer}
-        onPress={this._handleToggleFlash}
+        onPress={this._handleToggleTorch}
       >
-        <Text
-          style={{
-            fontSize: 40,
-            textAlign: 'center',
-            color: '#FFF',
-          }}
-        >
-          Toggle the Flash
-        </Text>
+        <Image
+          source={source}
+          tintColor={'rgba(255, 0, 0, 1)'}
+        />
       </TouchableOpacity>
     );
   }
 
-  render() {
+  _renderOverlay() {
     return (
       <SafeAreaView style={styles.safeAreaView}>
         <View style={styles.container}>
+
           {this._renderControls()}
-          <DriversLicenseBarcodeScanner
-            style={{ flex: 1 }}
-            license={this._license()}
-            flash={this._flash()}
-            onSuccess={this._handleSuccess}
-            onError={this._handleError}
-          />
           {this._renderValue()}
         </View>
       </SafeAreaView>
     );
   }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <DriversLicenseBarcodeScanner
+          license={this._license()}
+          flash={this._torch()}
+          onSuccess={this._handleSuccess}
+          onError={this._handleError}
+        />
+        {this._renderOverlay()}
+      </View>
+
+    );
+  }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   safeAreaView: {
     flex: 1,
-    backgroundColor: '#000',
+    ...StyleSheet.absoluteFillObject,
   },
   toggleFlashContainer: {
-    // ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    padding: 10,
+    borderRadius: 25,
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   value: {
     fontSize: 20,
     color: '#F00',
     backgroundColor: 'transparent',
-  },
-  container: {
-    flex: 1,
   },
 });
