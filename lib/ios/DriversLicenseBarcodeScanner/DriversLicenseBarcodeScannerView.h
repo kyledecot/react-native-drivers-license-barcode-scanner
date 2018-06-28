@@ -25,7 +25,6 @@ typedef enum eMainScreenState {
 @property (nonatomic, retain) AVCaptureVideoPreviewLayer *prevLayer;
 @property (nonatomic, retain) NSTimer *focusTimer;
 
-- (void)decodeResultNotification: (NSNotification *)notification;
 - (void)initCapture;
 - (void) startScanning;
 - (void) stopScanning;
