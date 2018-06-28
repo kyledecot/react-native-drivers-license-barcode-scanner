@@ -84,9 +84,9 @@ public class DriversLicenseBarcodeScannerManager extends SimpleViewManager<Drive
         view.setLicense(license);
     }
 
-    @ReactProp(name = "flash")
-    public void setFlash(DriversLicenseBarcodeScanner view, boolean flash) {
-        view.setFlash(flash);
+    @ReactProp(name = "torch")
+    public void setTorch(DriversLicenseBarcodeScanner view, boolean torch) {
+        view.setTorch(torch);
     }
 
     @Override

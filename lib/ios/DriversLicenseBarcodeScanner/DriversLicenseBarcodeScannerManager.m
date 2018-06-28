@@ -17,7 +17,7 @@ RCT_EXPORT_MODULE()
 //RCT_EXPORT_VIEW_PROPERTY(onSuccess, RCTBubblingEventBlock)
 // RCT_EXPORT_VIEW_PROPERTY(onError, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(license, NSString)
-RCT_EXPORT_VIEW_PROPERTY(flash, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(torch, BOOL)
 
 //RCT_EXPORT_METHOD(forceTimeout: (nonnull NSNumber *)reactTag)
 //{
@@ -34,7 +34,8 @@ RCT_EXPORT_VIEW_PROPERTY(flash, BOOL)
 
 - (UIView *)view {
     DriversLicenseBarcodeScannerView *view = [[DriversLicenseBarcodeScannerView alloc] init];
-//    view.bridge = self.bridge;
+    
+    //    view.bridge = self.bridge;
 //    view.delegate = self;
     
     return view;

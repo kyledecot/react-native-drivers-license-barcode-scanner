@@ -161,12 +161,12 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
         getCameraManager().requestPreviewFrame(getDecodeHandler(), ID_DECODE);
     }
 
-    public void setFlash(boolean flash) {
+    public void setTorch(boolean torch) {
         if (getCameraManager() == null || !getCameraManager().isTorchAvailable()) {
             return;
         }
 
-        getCameraManager().setTorch(flash);
+        getCameraManager().setTorch(torch);
     }
 
     public void setLicense(String license) {
@@ -271,7 +271,7 @@ public class DriversLicenseBarcodeScanner extends SurfaceView implements Surface
         getCameraManager().closeDriver();
 
         stop();
-        setFlash(false);
+        setTorch(false);
     }
 
   public void onDestroy() {

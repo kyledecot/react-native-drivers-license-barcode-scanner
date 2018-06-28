@@ -97,11 +97,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  DoubleConversion: ebb6747c5b66026ad4f97b789c3ceac6f18e57a6
+  DoubleConversion: e22e0762848812a87afd67ffda3998d9ef29170c
   Folly: 211775e49d8da0ca658aebc8eab89d642935755c
   glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
   React: aa2040dbb6f317b95314968021bd2888816e03d5
-  react-native-drivers-license-barcode-scanner: 1a61572420dddb6004ac620c64aba8967ff12895
+  react-native-drivers-license-barcode-scanner: 1e84a88b7ef2a0b670b363ade77f33053d90d4d6
   yoga: a23273df0088bf7f2bb7e5d7b00044ea57a2a54a
 
 PODFILE CHECKSUM: 665cf418a4951e4840776e83bc225da512a9d5e9

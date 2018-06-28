@@ -7,10 +7,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  NSURL *jsCodeLocation;
-
-  jsCodeLocation = [NSURL URLWithString:[NSString stringWithFormat:@"http://%1$@:8081/example/index.bundle?platform=ios&dev=true", LOCAL_IP_ADDRESS]];
-
+  NSURL *jsCodeLocation = [NSURL URLWithString:[NSString stringWithFormat:@"http://%1$@:8081/example/index.bundle?platform=ios&dev=true", LOCAL_IP_ADDRESS]];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Example"
                                                initialProperties:nil
