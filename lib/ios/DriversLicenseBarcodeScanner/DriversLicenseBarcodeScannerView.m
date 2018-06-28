@@ -209,24 +209,7 @@
     MWB_setDirection(MWB_SCANDIRECTION_HORIZONTAL);
     MWB_setScanningRect(MWB_CODE_MASK_PDF, RECT_LANDSCAPE_1D);
     MWB_setLevel(2);
-
-    //Set minimum result length for low-protected barcode types
-    MWB_setMinLength(MWB_CODE_MASK_25, 5);
-    MWB_setMinLength(MWB_CODE_MASK_MSI, 5);
-    MWB_setMinLength(MWB_CODE_MASK_39, 5);
-    MWB_setMinLength(MWB_CODE_MASK_CODABAR, 5);
-    MWB_setMinLength(MWB_CODE_MASK_11, 5);
-
-    //Use MWResult class instead of barcode raw byte array as result
     MWB_setResultType(MWB_RESULT_TYPE_MW);
-
-    //get and print Library version
-    int ver = MWB_getLibVersion();
-    int v1 = (ver >> 16);
-    int v2 = (ver >> 8) & 0xff;
-    int v3 = (ver & 0xff);
-    NSString *libVersion = [NSString stringWithFormat:@"%d.%d.%d", v1, v2, v3];
-    NSLog(@"Lib version: %@", libVersion);
 }
 
 - (void) setTorch: (bool) torchOn {
