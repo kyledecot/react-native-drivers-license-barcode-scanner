@@ -71,6 +71,14 @@ typedef enum eMainScreenState {
     return self;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    return [self initWithCoder:aDecoder];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    return [self initWithFrame:frame];
+}
+
 - (CALayer *)layer
 {
     return (AVCaptureVideoPreviewLayer *)[super layer];
