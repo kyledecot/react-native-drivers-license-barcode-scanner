@@ -51,7 +51,7 @@ typedef enum eMainScreenState {
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
 {
-    if ((self = [super init])) {
+    if ((self = [super initWithFrame:CGRectZero])) {
         self->captureSession = [self configureCaptureSession];
         self->captureSessionQueue = [self configureCaptureSessionQueue];
         self->device = [self configureCaptureDevice];
