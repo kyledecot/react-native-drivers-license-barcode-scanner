@@ -15,9 +15,11 @@
 RCT_EXPORT_MODULE()
 
 //RCT_EXPORT_VIEW_PROPERTY(onSuccess, RCTBubblingEventBlock)
-// RCT_EXPORT_VIEW_PROPERTY(onError, RCTBubblingEventBlock)
+//RCT_EXPORT_VIEW_PROPERTY(onError, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(license, NSString)
 RCT_EXPORT_VIEW_PROPERTY(torch, BOOL)
+
+@synthesize bridge = _bridge;
 
 //RCT_EXPORT_METHOD(forceTimeout: (nonnull NSNumber *)reactTag)
 //{
@@ -33,11 +35,8 @@ RCT_EXPORT_VIEW_PROPERTY(torch, BOOL)
 //}
 
 - (UIView *)view {
-    DriversLicenseBarcodeScannerView *view = [[DriversLicenseBarcodeScannerView alloc] init];
-    
-    //    view.bridge = self.bridge;
-//    view.delegate = self;
-    
+    DriversLicenseBarcodeScannerView *view = [[DriversLicenseBarcodeScannerView alloc] initWithEventDispatcher:self.bridge.eventDispatcher];
+
     return view;
 }
 

@@ -1,5 +1,5 @@
 #import "DriversLicenseBarcodeScannerView.h"
-#import "UIView+React.h"
+//#import "UIView+React.h"
 #import "BarcodeScanner.h"
 #import "MWResult.h"
 
@@ -42,8 +42,6 @@ typedef enum eMainScreenState {
     AVCaptureSession *captureSession;
 }
 
-@synthesize license = _license;
-
 + (Class)layerClass {
     return [AVCaptureVideoPreviewLayer class];
 }
@@ -51,39 +49,113 @@ typedef enum eMainScreenState {
 #pragma mark -
 #pragma mark Initialization
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        self->captureSession = [[AVCaptureSession alloc] init];
+- (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
+{
+    if ((self = [super init])) {
+        self->captureSession = [self configureCaptureSession];
+        self->captureSessionQueue = [self configureCaptureSessionQueue];
+        self->device = [self configureCaptureDevice];
         
-        captureSessionQueue = dispatch_queue_create([self->captureSession.self.description UTF8String], NULL);
-        NSError *error;
-        self->device = [self backCamera];
-        AVCaptureDeviceInput *captureInput = [AVCaptureDeviceInput deviceInputWithDevice:self->device error:&error];
-        
-        if (error != NULL) {
-            NSString *description = error.localizedDescription;
-            NSLog(@"%@", description);
-            
-            abort(); // TODO: What to do here?
-        }
+        AVCaptureDeviceInput *captureInput = [self configureCaptureInputWithDevice: self->device];
+        AVCaptureVideoDataOutput *captureOutput = [self configureCaptureOutput];
 
-        AVCaptureVideoDataOutput *captureOutput = [[AVCaptureVideoDataOutput alloc] init];
-        [captureOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()]; // TODO: Should this be on the main queue?
-        
         [self configureDecoder];
         [self configureCaptureSessionWithInput:captureInput andOutput:captureOutput];
         [self configurePreviewLayer];
-        
-        dispatch_async(captureSessionQueue, ^{
-            self->state = CAMERA;
-            [self->captureSession startRunning];
-        });
+
+        [self startCapturing];
+    } else {
+        NSLog(@"NOPE");
     }
+    
     return self;
 }
 
+- (CALayer *)layer
+{
+    return (AVCaptureVideoPreviewLayer *)[super layer];
+}
 
+- (dispatch_queue_t)configureCaptureSessionQueue
+{
+    return dispatch_queue_create([self->captureSession.self.description UTF8String], NULL);
+}
+
+- (void)startCapturing {
+    dispatch_async(self->captureSessionQueue, ^{
+        self->state = CAMERA;
+        [self->captureSession startRunning];
+    });
+}
+
+- (AVCaptureSession *)configureCaptureSession
+{
+    return [[AVCaptureSession alloc] init];
+}
+
+- (AVCaptureDeviceInput *)configureCaptureInputWithDevice:(AVCaptureDevice *)device
+{
+    NSError *error;
+    AVCaptureDeviceInput *captureInput = [AVCaptureDeviceInput deviceInputWithDevice:self->device error:&error];
+    
+    if (error != NULL) {
+        NSString *description = error.localizedDescription;
+        NSLog(@"%@", description);
+        
+        abort(); // TODO: What to do here?
+    }
+    
+    return captureInput;
+}
+
+- (AVCaptureVideoDataOutput *)configureCaptureOutput
+{
+    AVCaptureVideoDataOutput *captureOutput = [[AVCaptureVideoDataOutput alloc] init];
+
+    [captureOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()]; // TODO: Should this be on the main queue?
+    
+    return captureOutput;
+}
+
+- (void)configurePreviewLayer
+{
+    AVCaptureVideoPreviewLayer *layer = (AVCaptureVideoPreviewLayer *)self.layer;
+    
+    [layer setSession:self->captureSession];
+    [layer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
+}
+
+- (void)configureCaptureSessionWithInput:(AVCaptureDeviceInput *)input andOutput:(AVCaptureOutput *)output
+{
+    [self->captureSession beginConfiguration];
+    
+    [self->captureSession addInput:input];
+    [self->captureSession addOutput:output];
+    
+    [self->captureSession commitConfiguration];
+}
+
+- (AVCaptureDevice *)configureCaptureDevice
+{
+    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    
+    for (AVCaptureDevice *device in devices) {
+        if ([device position] == AVCaptureDevicePositionBack) {
+            return device;
+        }
+    }
+    
+    return nil; // TODO: We need a device! What should happen here?
+}
+
+- (void)configureDecoder
+{
+    MWB_setActiveCodes(MWB_CODE_MASK_PDF);
+    MWB_setDirection(MWB_SCANDIRECTION_HORIZONTAL);
+    MWB_setScanningRect(MWB_CODE_MASK_PDF, RECT_LANDSCAPE_1D);
+    MWB_setLevel(2);
+    MWB_setResultType(MWB_RESULT_TYPE_MW);
+}
 
 # pragma mark -
 # pragma mark deallocation
@@ -96,37 +168,10 @@ typedef enum eMainScreenState {
     });
 }
 
+# pragma mark - Setters
 
-- (CALayer *)layer {
-    return (AVCaptureVideoPreviewLayer *)[super layer];
-}
-
-- (void)configurePreviewLayer {
-    [(AVCaptureVideoPreviewLayer *)self.layer setSession:self->captureSession];
-    [(AVCaptureVideoPreviewLayer *)self.layer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
-}
-
-- (void)configureCaptureSessionWithInput:(AVCaptureDeviceInput *)input andOutput:(AVCaptureOutput *)output {
-    [self->captureSession beginConfiguration];
-    
-    [self->captureSession addInput:input];
-    [self->captureSession addOutput:output];
-    
-    [self->captureSession commitConfiguration];
-}
-
-- (void)configureDecoder {
-    MWB_setActiveCodes(MWB_CODE_MASK_PDF);
-    MWB_setDirection(MWB_SCANDIRECTION_HORIZONTAL);
-    MWB_setScanningRect(MWB_CODE_MASK_PDF, RECT_LANDSCAPE_1D);
-    MWB_setLevel(2);
-    MWB_setResultType(MWB_RESULT_TYPE_MW);
-}
-
-# pragma mark -
-# pragma mark Setters
-
-- (void) setTorch: (bool) torchOn {
+- (void)setTorch:(bool)torchOn
+{
     if ([self->device isTorchModeSupported:AVCaptureTorchModeOn]) {
         NSError *error;
 
@@ -142,7 +187,10 @@ typedef enum eMainScreenState {
     }
 }
 
-- (void)setLicense:(NSString *)license {
+- (void)setLicense:(NSString *)license
+{
+//    [self onError];
+    
     switch (MWB_registerSDK([license UTF8String])) {
         case MWB_RTREG_OK:
             NSLog(@"Registration OK");
@@ -178,7 +226,13 @@ typedef enum eMainScreenState {
 # pragma mark -
 # pragma mark Lifecycle
 
-- (void)layoutSubviews {
+- (void)removeFromSuperview
+{
+  // TODO We should stop capturing, remove focus timers, etc
+}
+
+- (void)layoutSubviews
+{
     // TODO: This will not work if you go from landscape left <-> landscape right (will end up upside-down)
     
     [super layoutSubviews];
@@ -202,22 +256,23 @@ typedef enum eMainScreenState {
     }
 }
 
-- (AVCaptureDevice *)backCamera {
-    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-
-    for (AVCaptureDevice *device in devices) {
-        if ([device position] == AVCaptureDevicePositionBack) {
-            return device;
-        }
-    }
-
-    return nil;
+- (void)stopCapturing
+{
+    [self->captureSession stopRunning];
 }
 
 # pragma MARK: -
 # pragma MARK: AVCaptureVideoDataOutputSampleBufferDelegate
 
-- (void)captureOutput:(AVCaptureOutput *)output didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
+- (void)insertReactSubview:(UIView *)view atIndex:(NSInteger)atIndex
+{
+
+    
+    view.frame = self.bounds;
+}
+
+- (void)captureOutput:(AVCaptureOutput *)output didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
+{
     if (state != CAMERA && state != CAMERA_DECODING) {
         NSLog(@"WRONG STATE");
         return;
@@ -237,7 +292,6 @@ typedef enum eMainScreenState {
     activeThreads++;
     
 //    NSLog(@"LOOKING...");
-
 
     CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     //Lock the image buffer
@@ -302,25 +356,20 @@ typedef enum eMainScreenState {
 
         //CVPixelBufferUnlockBaseAddress(imageBuffer,0);
         
-
         //ignore results less than 4 characters - probably false detection
-        if (mwResult)
-        {
-
-
+        if (mwResult) {
             self->state = CAMERA;
+            
             dispatch_async(dispatch_get_main_queue(), ^(void) {
-//                [self->captureSession stopRunning];
-                NSLog(@"%@", mwResult);
-
+//
+                
+                NSLog(@"%@", mwResult.text);
+//                [self stopCapturing];
             });
 
-        }
-        else
-        {
+        } else {
             self->state = CAMERA;
         }
-
 
         self->activeThreads --;
 
