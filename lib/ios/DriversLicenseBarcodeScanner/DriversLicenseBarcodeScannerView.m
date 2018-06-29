@@ -18,7 +18,7 @@ typedef enum eMainScreenState {
 
 @implementation DriversLicenseBarcodeScannerView {
     BOOL _torch;
-    dispatch_queue_t captureSessionQueue;
+    dispatch_queue_t _captureSessionQueue;
     bool running;
     int activeThreads;
     int availableThreads;
@@ -30,16 +30,8 @@ typedef enum eMainScreenState {
     int bytesPerRow;
     unsigned char *baseAddress;
     NSTimer *focusTimer;
-    AVCaptureDevice *device;
-
-    int param_ZoomLevel1;
-    int param_ZoomLevel2;
-    int zoomLevel;
-    bool videoZoomSupported;
-    float firstZoom;
-    float secondZoom;
-    float digitalZoom;
-    AVCaptureSession *captureSession;
+    AVCaptureDevice *_device;
+    AVCaptureSession *_captureSession;
 }
 
 + (Class)layerClass {
@@ -52,11 +44,11 @@ typedef enum eMainScreenState {
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
 {
     if ((self = [super initWithFrame:CGRectZero])) {
-        self->captureSession = [self configureCaptureSession];
-        self->captureSessionQueue = [self configureCaptureSessionQueue];
-        self->device = [self configureCaptureDevice];
+        self->_captureSession = [self configureCaptureSession];
+        self->_captureSessionQueue = [self configureCaptureSessionQueue];
+        self->_device = [self configureCaptureDevice];
         
-        AVCaptureDeviceInput *captureInput = [self configureCaptureInputWithDevice: self->device];
+        AVCaptureDeviceInput *captureInput = [self configureCaptureInputWithDevice: self->_device];
         AVCaptureVideoDataOutput *captureOutput = [self configureCaptureOutput];
 
         [self configureDecoder];
@@ -64,18 +56,18 @@ typedef enum eMainScreenState {
         [self configurePreviewLayer];
 
         [self startCapturing];
-    } else {
-        NSLog(@"NOPE");
     }
     
     return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
     return [self initWithCoder:aDecoder];
 }
 
-- (instancetype)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame
+{
     return [self initWithFrame:frame];
 }
 
@@ -86,13 +78,13 @@ typedef enum eMainScreenState {
 
 - (dispatch_queue_t)configureCaptureSessionQueue
 {
-    return dispatch_queue_create([self->captureSession.self.description UTF8String], NULL);
+    return dispatch_queue_create([self->_captureSession.self.description UTF8String], NULL);
 }
 
 - (void)startCapturing {
-    dispatch_async(self->captureSessionQueue, ^{
+    dispatch_async(self->_captureSessionQueue, ^{
         self->state = CAMERA;
-        [self->captureSession startRunning];
+        [self->_captureSession startRunning];
     });
 }
 
@@ -104,7 +96,7 @@ typedef enum eMainScreenState {
 - (AVCaptureDeviceInput *)configureCaptureInputWithDevice:(AVCaptureDevice *)device
 {
     NSError *error;
-    AVCaptureDeviceInput *captureInput = [AVCaptureDeviceInput deviceInputWithDevice:self->device error:&error];
+    AVCaptureDeviceInput *captureInput = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
     
     if (error != NULL) {
         NSString *description = error.localizedDescription;
@@ -129,18 +121,18 @@ typedef enum eMainScreenState {
 {
     AVCaptureVideoPreviewLayer *layer = (AVCaptureVideoPreviewLayer *)self.layer;
     
-    [layer setSession:self->captureSession];
+    [layer setSession:self->_captureSession];
     [layer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
 }
 
 - (void)configureCaptureSessionWithInput:(AVCaptureDeviceInput *)input andOutput:(AVCaptureOutput *)output
 {
-    [self->captureSession beginConfiguration];
+    [self->_captureSession beginConfiguration];
     
-    [self->captureSession addInput:input];
-    [self->captureSession addOutput:output];
+    [self->_captureSession addInput:input];
+    [self->_captureSession addOutput:output];
     
-    [self->captureSession commitConfiguration];
+    [self->_captureSession commitConfiguration];
 }
 
 - (AVCaptureDevice *)configureCaptureDevice
@@ -153,7 +145,7 @@ typedef enum eMainScreenState {
         }
     }
     
-    return nil; // TODO: We need a device! What should happen here?
+    return nil; // TODO: We need a _device! What should happen here?
 }
 
 - (void)configureDecoder
@@ -170,9 +162,9 @@ typedef enum eMainScreenState {
 
 - (void)dealloc
 {
-    dispatch_async(captureSessionQueue, ^{
+    dispatch_async(_captureSessionQueue, ^{
         // TODO: Will this work if the dealloc happens before this block is ran?
-        [self->captureSession stopRunning];
+        [self->_captureSession stopRunning];
     });
 }
 
@@ -180,15 +172,15 @@ typedef enum eMainScreenState {
 
 - (void)setTorch:(bool)torchOn
 {
-    if ([self->device isTorchModeSupported:AVCaptureTorchModeOn]) {
+    if ([self->_device isTorchModeSupported:AVCaptureTorchModeOn]) {
         NSError *error;
 
-        if ([self->device lockForConfiguration:&error]) {
+        if ([self->_device lockForConfiguration:&error]) {
             if (torchOn)
-                [self->device setTorchMode:AVCaptureTorchModeOn];
+                [self->_device setTorchMode:AVCaptureTorchModeOn];
             else
-                [self->device setTorchMode:AVCaptureTorchModeOff];
-            [self->device unlockForConfiguration];
+                [self->_device setTorchMode:AVCaptureTorchModeOff];
+            [self->_device unlockForConfiguration];
         } else {
             // TODO
         }
@@ -266,7 +258,7 @@ typedef enum eMainScreenState {
 
 - (void)stopCapturing
 {
-    [self->captureSession stopRunning];
+    [self->_captureSession stopRunning];
 }
 
 # pragma MARK: -
