@@ -41,8 +41,6 @@ export default class App extends React.Component {
   };
 
   _handleSuccess = value => {
-    console.warn(value);
-
     this.setState({
       value,
     });
@@ -58,7 +56,7 @@ export default class App extends React.Component {
     }
 
     return (
-      <TouchableOpacity onPress={this._handlePress}>
+      <TouchableOpacity style={styles.valueContainer} onPress={this._handlePress}>
         <Text style={styles.value}>{this.state.value}</Text>
       </TouchableOpacity>
     );
@@ -129,6 +127,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  valueContainer: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+    bottom: 20,
+    right: 20,
+    margin: 70,
+
+  },
   safeAreaView: {
     flex: 1,
     ...StyleSheet.absoluteFillObject,
@@ -146,8 +153,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   value: {
-    fontSize: 20,
-    color: '#F00',
+    textAlign: 'center',
+    fontSize: 18,
+    color: '#FFF',
     backgroundColor: 'transparent',
   },
   guide: {
