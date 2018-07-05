@@ -11,6 +11,7 @@
 		FC4939902080F4C7005E969C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC49395B2080E6D9005E969C /* AVFoundation.framework */; };
 		FC52B4FC20990A1F00E5AA45 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC52B4FB20990A1F00E5AA45 /* CoreVideo.framework */; };
 		FCB46F912080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB46F902080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m */; };
+		FCD2AF0020EE63BB0066D966 /* libDriverLicenseParser.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FCD2AEFF20EE63BB0066D966 /* libDriverLicenseParser.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,8 @@
 		FC52B4FB20990A1F00E5AA45 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		FCB46F8F2080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DriversLicenseBarcodeScannerManager.h; path = DriversLicenseBarcodeScanner/DriversLicenseBarcodeScannerManager.h; sourceTree = "<group>"; };
 		FCB46F902080DB44005A4E66 /* DriversLicenseBarcodeScannerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DriversLicenseBarcodeScannerManager.m; path = DriversLicenseBarcodeScanner/DriversLicenseBarcodeScannerManager.m; sourceTree = "<group>"; };
+		FCD2AEFE20EE63BB0066D966 /* DriverLicenseParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DriverLicenseParser.h; path = DriversLicenseBarcodeScanner/DriverLicenseParser.h; sourceTree = "<group>"; };
+		FCD2AEFF20EE63BB0066D966 /* libDriverLicenseParser.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDriverLicenseParser.a; path = DriversLicenseBarcodeScanner/libDriverLicenseParser.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +38,7 @@
 			files = (
 				FC52B4FC20990A1F00E5AA45 /* CoreVideo.framework in Frameworks */,
 				FC4939902080F4C7005E969C /* AVFoundation.framework in Frameworks */,
+				FCD2AF0020EE63BB0066D966 /* libDriverLicenseParser.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +65,8 @@
 		9B9498A32017EF9D00158761 /* DriversLicenseBarcodeScanner */ = {
 			isa = PBXGroup;
 			children = (
+				FCD2AEFE20EE63BB0066D966 /* DriverLicenseParser.h */,
+				FCD2AEFF20EE63BB0066D966 /* libDriverLicenseParser.a */,
 				FC49396E2080EE74005E969C /* BarcodeScanner.h */,
 				FC49396C2080EE74005E969C /* libBarcodeScanner.a */,
 				FC49396D2080EE74005E969C /* MWParser.h */,
@@ -236,6 +242,10 @@
 					"$(SRCROOT)/../../react-native/Libraries/Image",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DriversLicenseBarcodeScanner",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -250,6 +260,10 @@
 					"$(SRCROOT)/../../react-native/Libraries/Image",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DriversLicenseBarcodeScanner",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

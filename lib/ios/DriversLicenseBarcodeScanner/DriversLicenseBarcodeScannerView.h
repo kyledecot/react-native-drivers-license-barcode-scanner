@@ -12,7 +12,7 @@
 @property (nonatomic, assign) NSString *license;
 @property (nonatomic, assign) BOOL torch;
 @property (nonatomic, assign) BOOL active;
-//@property (nonatomic, copy) RCTBubblingEventBlock onError;
+@property (nonatomic, copy) RCTDirectEventBlock onSuccess;
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher NS_DESIGNATED_INITIALIZER;
 

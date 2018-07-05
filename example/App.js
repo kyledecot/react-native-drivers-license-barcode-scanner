@@ -41,6 +41,8 @@ export default class App extends React.Component {
   };
 
   _handleSuccess = value => {
+    console.warn(value);
+
     this.setState({
       value,
     });
@@ -114,8 +116,7 @@ export default class App extends React.Component {
         <DriversLicenseBarcodeScanner
           license={this._license()}
           torch={this._torch()}
-          // onSuccess={this._handleSuccess}
-          // onError={this._handleError}
+          onSuccess={this._handleSuccess}
         />
         {this._renderOverlay()}
       </View>

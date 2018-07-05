@@ -1,11 +1,8 @@
 #import "DriversLicenseBarcodeScannerView.h"
-//#import "UIView+React.h"
 #import "BarcodeScanner.h"
 #import "MWResult.h"
 
-#include <mach/mach_host.h>
-
-#define RECT_LANDSCAPE_1D 4, 20, 92, 60
+#define MAX_THREADS 2
 
 typedef enum eMainScreenState {
     NORMAL,
@@ -50,7 +47,9 @@ typedef enum eMainScreenState {
         
         AVCaptureDeviceInput *captureInput = [self configureCaptureInputWithDevice: self->_device];
         AVCaptureVideoDataOutput *captureOutput = [self configureCaptureOutput];
-
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:@"UIDeviceOrientationDidChangeNotification" object:nil];
+        
         [self configureDecoder];
         [self configureCaptureSessionWithInput:captureInput andOutput:captureOutput];
         [self configurePreviewLayer];
@@ -69,6 +68,40 @@ typedef enum eMainScreenState {
 - (instancetype)initWithFrame:(CGRect)frame
 {
     return [self initWithFrame:frame];
+}
+
+- (void)deviceOrientationDidChange:(NSNotification *)notification
+{
+    AVCaptureConnection *connection = [(AVCaptureVideoPreviewLayer *)self.layer connection];
+    AVCaptureVideoOrientation orientation;
+    CGSize size = self.frame.size;
+    int direction;
+    
+    switch ([[UIDevice currentDevice] orientation]) {
+        case UIDeviceOrientationPortrait:
+        case UIDeviceOrientationFaceUp:
+        case UIDeviceOrientationFaceDown:
+        case UIDeviceOrientationUnknown:
+            orientation = AVCaptureVideoOrientationPortrait;
+            direction = MWB_SCANDIRECTION_VERTICAL;
+            break;
+        case UIDeviceOrientationLandscapeLeft:
+            orientation = AVCaptureVideoOrientationLandscapeRight;
+            direction = MWB_SCANDIRECTION_HORIZONTAL;
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            orientation = AVCaptureVideoOrientationLandscapeLeft;
+            direction = MWB_SCANDIRECTION_HORIZONTAL;
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            orientation = AVCaptureVideoOrientationPortraitUpsideDown;
+            direction = MWB_SCANDIRECTION_VERTICAL;
+            break;
+    }
+    
+    [connection setVideoOrientation:orientation];
+    MWB_setDirection(direction);
+    MWB_setScanningRect(MWB_CODE_MASK_PDF, 0, 0, size.width, size.height);
 }
 
 - (CALayer *)layer
@@ -151,8 +184,6 @@ typedef enum eMainScreenState {
 - (void)configureDecoder
 {
     MWB_setActiveCodes(MWB_CODE_MASK_PDF);
-    MWB_setDirection(MWB_SCANDIRECTION_HORIZONTAL);
-    MWB_setScanningRect(MWB_CODE_MASK_PDF, RECT_LANDSCAPE_1D);
     MWB_setLevel(2);
     MWB_setResultType(MWB_RESULT_TYPE_MW);
 }
@@ -189,8 +220,6 @@ typedef enum eMainScreenState {
 
 - (void)setLicense:(NSString *)license
 {
-//    [self onError];
-    
     switch (MWB_registerSDK([license UTF8String])) {
         case MWB_RTREG_OK:
             NSLog(@"Registration OK");
@@ -216,7 +245,6 @@ typedef enum eMainScreenState {
         case MWB_RTREG_KEY_EXPIRED:
             NSLog(@"Registration Key Expired");
             break;
-
         default:
             NSLog(@"Registration Unknown Error");
             break;
@@ -231,44 +259,61 @@ typedef enum eMainScreenState {
   // TODO We should stop capturing, remove focus timers, etc
 }
 
-- (void)layoutSubviews
-{
-    // TODO: This will not work if you go from landscape left <-> landscape right (will end up upside-down)
-    
-    [super layoutSubviews];
-    
-    switch ([[UIDevice currentDevice] orientation]) {
-        case UIDeviceOrientationPortrait:
-            [[(AVCaptureVideoPreviewLayer *)self.layer connection] setVideoOrientation:AVCaptureVideoOrientationPortrait];
-
-            break;
-        case UIDeviceOrientationLandscapeLeft:
-            [[(AVCaptureVideoPreviewLayer *)self.layer connection] setVideoOrientation:AVCaptureVideoOrientationLandscapeRight];
-            break;
-        case UIDeviceOrientationLandscapeRight:
-            [[(AVCaptureVideoPreviewLayer *)self.layer connection] setVideoOrientation:AVCaptureVideoOrientationLandscapeLeft];
-            break;
-        case UIDeviceOrientationPortraitUpsideDown:
-            [[(AVCaptureVideoPreviewLayer *)self.layer connection] setVideoOrientation:AVCaptureVideoOrientationPortraitUpsideDown];
-            break;
-        default:
-            break;
-    }
-}
+//- (void)layoutSubviews
+//{
+//    // TODO: This will not work if you go from landscape left <-> landscape right (will end up upside-down)
+//
+//    [super layoutSubviews];
+//
+//    NSLog(@"%@", NSStringFromCGRect([self frame]));
+//
+//
+//}
 
 - (void)stopCapturing
 {
     [self->_captureSession stopRunning];
 }
 
+- (void)decode:(NSString *)text
+{
+    NSLog(@"%@", text);
+    
+//    NSString *decodeResult;
+//    unsigned char * parserResult = NULL;
+//    double parserRes = -1;
+//    NSString *parserMask;
+//
+//
+//    parserRes = MWP_getJSON(MWPARSER_MASK, result.encryptedResult, result.bytesLength, &parserResult);
+//
+//    if (parserRes >= 0){
+//        decodeResult = [NSString stringWithCString:parserResult encoding:NSUTF8StringEncoding];
+//
+//
+//    }
+//
+//    NSLog(@"%@", decodeResult);
+}
+
+
 # pragma MARK: -
 # pragma MARK: AVCaptureVideoDataOutputSampleBufferDelegate
 
 - (void)insertReactSubview:(UIView *)view atIndex:(NSInteger)atIndex
 {
-
-    
     view.frame = self.bounds;
+}
+
+- (MWResult *)resultFromBuffer:(uint8_t *)buffer
+{
+    MWResults *mwResults = [[MWResults alloc] initWithBuffer:buffer];
+
+    if (mwResults && mwResults.count > 0) {
+        return [mwResults resultAtIntex:0];
+    }
+    
+    return NULL;
 }
 
 - (void)captureOutput:(AVCaptureOutput *)output didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
@@ -284,8 +329,7 @@ typedef enum eMainScreenState {
 //        return;
 //    }
 
-    if (state != CAMERA_DECODING)
-    {
+    if (state != CAMERA_DECODING) {
         state = CAMERA_DECODING;
     }
 
@@ -304,11 +348,11 @@ typedef enum eMainScreenState {
             //NSLog(@"Capture pixel format=NV12");
             bytesPerRow = (int) CVPixelBufferGetBytesPerRowOfPlane(imageBuffer,0);
             width = bytesPerRow;//CVPixelBufferGetWidthOfPlane(imageBuffer,0);
-            height = (int) CVPixelBufferGetHeightOfPlane(imageBuffer,0);
+            height = (int) CVPixelBufferGetHeightOfPlane(imageBuffer, 0);
             break;
         case kCVPixelFormatType_422YpCbCr8:
             //NSLog(@"Capture pixel format=UYUY422");
-            bytesPerRow = (int) CVPixelBufferGetBytesPerRowOfPlane(imageBuffer,0);
+            bytesPerRow = (int) CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 0);
             width = (int) CVPixelBufferGetWidth(imageBuffer);
             height = (int) CVPixelBufferGetHeight(imageBuffer);
             int len = width*height;
@@ -326,53 +370,41 @@ typedef enum eMainScreenState {
 
     unsigned char *frameBuffer = malloc(width * height);
     memcpy(frameBuffer, baseAddress, width * height);
-    CVPixelBufferUnlockBaseAddress(imageBuffer,0);
+    CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         unsigned char *pResult = NULL;
 
         int resLength = MWB_scanGrayscaleImage(frameBuffer,self->width,self->height, &pResult);
-
+        MWResult *result;
         free(frameBuffer);
 
 //         NSLog(@"Frame decoded. Active threads: %d", self->activeThreads);
 
-        MWResults *mwResults = nil;
-        MWResult *mwResult = nil;
-        if (resLength > 0){
-
-            if (self->state == NORMAL){
+        if (resLength > 0) {
+            if (self->state == NORMAL) {
                 resLength = 0;
-                free(pResult);
-
             } else {
-                mwResults = [[MWResults alloc] initWithBuffer:pResult];
-                if (mwResults && mwResults.count > 0){
-                    mwResult = [mwResults resultAtIntex:0];
-                }
-
-                free(pResult);
+                result = [self resultFromBuffer:pResult];
             }
         }
+
+        free(pResult);
 
         //CVPixelBufferUnlockBaseAddress(imageBuffer,0);
         
         //ignore results less than 4 characters - probably false detection
-        if (mwResult) {
+        if (result) {
             self->state = CAMERA;
             
             dispatch_async(dispatch_get_main_queue(), ^(void) {
-//
-                
-                NSLog(@"%@", mwResult.text);
-//                [self stopCapturing];
+                self->_onSuccess(@{ @"value" : result.text });
             });
-
         } else {
             self->state = CAMERA;
         }
 
         self->activeThreads --;
-
     });
 }
 
